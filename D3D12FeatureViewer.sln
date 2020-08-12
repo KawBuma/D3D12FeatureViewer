@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30330.147
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "D3D12FeatureViewer", "D3D12FeatureViewer.vcxproj", "{7AA916AC-079F-46A9-834A-271D8D1ED42E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7AA916AC-079F-46A9-834A-271D8D1ED42E}.Debug|x64.ActiveCfg = Debug|x64
+		{7AA916AC-079F-46A9-834A-271D8D1ED42E}.Debug|x64.Build.0 = Debug|x64
+		{7AA916AC-079F-46A9-834A-271D8D1ED42E}.Debug|x86.ActiveCfg = Debug|x64
+		{7AA916AC-079F-46A9-834A-271D8D1ED42E}.Release|x64.ActiveCfg = Release|x64
+		{7AA916AC-079F-46A9-834A-271D8D1ED42E}.Release|x64.Build.0 = Release|x64
+		{7AA916AC-079F-46A9-834A-271D8D1ED42E}.Release|x86.ActiveCfg = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6AD5C653-792D-43C7-A004-BB8947E33946}
+	EndGlobalSection
+EndGlobal
