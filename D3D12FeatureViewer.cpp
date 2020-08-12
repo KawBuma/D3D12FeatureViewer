@@ -100,7 +100,6 @@ std::ostream& operator<< (std::ostream& os, D3D12_CROSS_NODE_SHARING_TIER val)
 
     return os << s;
 }
-
 std::ostream& operator<< (std::ostream& os, D3D12_RESOURCE_HEAP_TIER val)
 {		
     std::string s;
@@ -116,6 +115,8 @@ std::ostream& operator<< (std::ostream& os, D3D12_RESOURCE_HEAP_TIER val)
 }
 
 #pragma endregion D3D12_FEATURE_DATA_D3D12_OPTIONS
+
+#pragma region os operators
 
 std::ostream& operator<< (std::ostream& os, D3D_FEATURE_LEVEL val)
 {
@@ -133,7 +134,6 @@ std::ostream& operator<< (std::ostream& os, D3D_FEATURE_LEVEL val)
 
     return os << s;
 }
-
 std::ostream& operator<< (std::ostream& os, DXGI_FORMAT val)
 {
     std::string s;
@@ -295,7 +295,6 @@ std::ostream& operator<< (std::ostream& os, D3D_ROOT_SIGNATURE_VERSION val)
 
     return os << s;
 }
-
 std::ostream& operator<< (std::ostream& os, D3D12_PROGRAMMABLE_SAMPLE_POSITIONS_TIER val)
 {
     std::string s;
@@ -310,7 +309,6 @@ std::ostream& operator<< (std::ostream& os, D3D12_PROGRAMMABLE_SAMPLE_POSITIONS_
 
     return os << s;
 }
-
 std::ostream& operator<< (std::ostream& os, D3D12_SHADER_CACHE_SUPPORT_FLAGS val)
 {
     std::string s;
@@ -322,7 +320,6 @@ std::ostream& operator<< (std::ostream& os, D3D12_SHADER_CACHE_SUPPORT_FLAGS val
 
     return os << s;
 }
-
 std::ostream& operator<< (std::ostream& os, D3D12_COMMAND_LIST_TYPE val)
 {
     std::string s;
@@ -341,7 +338,6 @@ std::ostream& operator<< (std::ostream& os, D3D12_COMMAND_LIST_TYPE val)
 
     return os << s;
 }
-
 std::ostream& operator<< (std::ostream& os, D3D12_COMMAND_QUEUE_PRIORITY val)
 {
     std::string s;
@@ -356,7 +352,6 @@ std::ostream& operator<< (std::ostream& os, D3D12_COMMAND_QUEUE_PRIORITY val)
 
     return os << s;
 }
-
 std::ostream& operator<< (std::ostream& os, D3D12_COMMAND_LIST_SUPPORT_FLAGS val)
 {
     std::string s;
@@ -371,7 +366,6 @@ std::ostream& operator<< (std::ostream& os, D3D12_COMMAND_LIST_SUPPORT_FLAGS val
 
     return os << s;
 }
-
 std::ostream& operator<< (std::ostream& os, D3D12_VIEW_INSTANCING_TIER val)
 {
     std::string s;
@@ -387,7 +381,6 @@ std::ostream& operator<< (std::ostream& os, D3D12_VIEW_INSTANCING_TIER val)
 
     return os << s;
 }
-
 std::ostream& operator<< (std::ostream& os, D3D12_SHARED_RESOURCE_COMPATIBILITY_TIER val)
 {
     std::string s;
@@ -401,7 +394,6 @@ std::ostream& operator<< (std::ostream& os, D3D12_SHARED_RESOURCE_COMPATIBILITY_
 
     return os << s;
 }
-
 std::ostream& operator<< (std::ostream& os, D3D12_HEAP_SERIALIZATION_TIER val)
 {
     std::string s;
@@ -415,7 +407,6 @@ std::ostream& operator<< (std::ostream& os, D3D12_HEAP_SERIALIZATION_TIER val)
 
     return os << s;
 }
-
 std::ostream& operator<< (std::ostream& os, D3D12_RENDER_PASS_TIER val)
 {
     std::string s;
@@ -430,7 +421,6 @@ std::ostream& operator<< (std::ostream& os, D3D12_RENDER_PASS_TIER val)
 
     return os << s;
 }
-
 std::ostream& operator<< (std::ostream& os, D3D12_RAYTRACING_TIER val)
 {
     std::string s;
@@ -444,7 +434,6 @@ std::ostream& operator<< (std::ostream& os, D3D12_RAYTRACING_TIER val)
 
     return os << s;
 }
-
 std::ostream& operator<< (std::ostream& os, D3D12_VARIABLE_SHADING_RATE_TIER val)
 {
     std::string s;
@@ -459,46 +448,44 @@ std::ostream& operator<< (std::ostream& os, D3D12_VARIABLE_SHADING_RATE_TIER val
 
     return os << s;
 }
-
 std::ostream& operator<< (std::ostream& os, D3D12_FORMAT_SUPPORT1 val)
 {
     std::string s;
     auto Align = [&]() { if (!s.empty())s += "\n\t         | "; };
 
-	ADD_IF4(s, val, == , D3D12_FORMAT_SUPPORT1_NONE                       , "NONE"                       , Align(); );
-	ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_BUFFER                     , "BUFFER"                     , Align(); );
-	ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_IA_VERTEX_BUFFER           , "IA_VERTEX_BUFFER"           , Align(); );
-	ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_IA_INDEX_BUFFER            , "IA_INDEX_BUFFER"            , Align(); );
-	ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_SO_BUFFER                  , "SO_BUFFER"                  , Align(); );
-	ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_TEXTURE1D                  , "TEXTURE1D"                  , Align(); );
-	ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_TEXTURE2D                  , "TEXTURE2D"                  , Align(); );
-	ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_TEXTURE3D                  , "TEXTURE3D"                  , Align(); );
-	ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_TEXTURECUBE                , "TEXTURECUBE"                , Align(); );
-	ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_SHADER_LOAD                , "SHADER_LOAD"                , Align(); );
-	ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_SHADER_SAMPLE              , "SHADER_SAMPLE"              , Align(); );
-	ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_SHADER_SAMPLE_COMPARISON   , "SHADER_SAMPLE_COMPARISON"   , Align(); );
-	ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_SHADER_SAMPLE_MONO_TEXT    , "SHADER_SAMPLE_MONO_TEXT"    , Align(); );
-	ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_MIP                        , "MIP"                        , Align(); );
-	ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_RENDER_TARGET              , "RENDER_TARGET"              , Align(); );
-	ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_BLENDABLE                  , "BLENDABLE"                  , Align(); );
-	ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_DEPTH_STENCIL              , "DEPTH_STENCIL"              , Align(); );
-	ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_MULTISAMPLE_RESOLVE        , "MULTISAMPLE_RESOLVE"        , Align(); );
-	ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_DISPLAY                    , "DISPLAY"                    , Align(); );
-	ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_CAST_WITHIN_BIT_LAYOUT     , "CAST_WITHIN_BIT_LAYOUT"     , Align(); );
-	ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_MULTISAMPLE_RENDERTARGET   , "MULTISAMPLE_RENDERTARGET"   , Align(); );
-	ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_MULTISAMPLE_LOAD           , "MULTISAMPLE_LOAD"           , Align(); );
-	ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_SHADER_GATHER              , "SHADER_GATHER"              , Align(); );
-	ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_BACK_BUFFER_CAST           , "BACK_BUFFER_CAST"           , Align(); );
-	ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_TYPED_UNORDERED_ACCESS_VIEW, "TYPED_UNORDERED_ACCESS_VIEW", Align(); );
-	ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_SHADER_GATHER_COMPARISON   , "SHADER_GATHER_COMPARISON"   , Align(); );
-	ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_DECODER_OUTPUT             , "DECODER_OUTPUT"             , Align(); );
-	ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_VIDEO_PROCESSOR_OUTPUT     , "VIDEO_PROCESSOR_OUTPUT"     , Align(); );
-	ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_VIDEO_PROCESSOR_INPUT      , "VIDEO_PROCESSOR_INPUT"      , Align(); );
-	ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_VIDEO_ENCODER              , "VIDEO_ENCODER"              , Align(); );
+    ADD_IF4(s, val, == , D3D12_FORMAT_SUPPORT1_NONE                       , "NONE"                       , Align(); );
+    ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_BUFFER                     , "BUFFER"                     , Align(); );
+    ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_IA_VERTEX_BUFFER           , "IA_VERTEX_BUFFER"           , Align(); );
+    ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_IA_INDEX_BUFFER            , "IA_INDEX_BUFFER"            , Align(); );
+    ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_SO_BUFFER                  , "SO_BUFFER"                  , Align(); );
+    ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_TEXTURE1D                  , "TEXTURE1D"                  , Align(); );
+    ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_TEXTURE2D                  , "TEXTURE2D"                  , Align(); );
+    ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_TEXTURE3D                  , "TEXTURE3D"                  , Align(); );
+    ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_TEXTURECUBE                , "TEXTURECUBE"                , Align(); );
+    ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_SHADER_LOAD                , "SHADER_LOAD"                , Align(); );
+    ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_SHADER_SAMPLE              , "SHADER_SAMPLE"              , Align(); );
+    ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_SHADER_SAMPLE_COMPARISON   , "SHADER_SAMPLE_COMPARISON"   , Align(); );
+    ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_SHADER_SAMPLE_MONO_TEXT    , "SHADER_SAMPLE_MONO_TEXT"    , Align(); );
+    ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_MIP                        , "MIP"                        , Align(); );
+    ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_RENDER_TARGET              , "RENDER_TARGET"              , Align(); );
+    ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_BLENDABLE                  , "BLENDABLE"                  , Align(); );
+    ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_DEPTH_STENCIL              , "DEPTH_STENCIL"              , Align(); );
+    ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_MULTISAMPLE_RESOLVE        , "MULTISAMPLE_RESOLVE"        , Align(); );
+    ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_DISPLAY                    , "DISPLAY"                    , Align(); );
+    ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_CAST_WITHIN_BIT_LAYOUT     , "CAST_WITHIN_BIT_LAYOUT"     , Align(); );
+    ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_MULTISAMPLE_RENDERTARGET   , "MULTISAMPLE_RENDERTARGET"   , Align(); );
+    ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_MULTISAMPLE_LOAD           , "MULTISAMPLE_LOAD"           , Align(); );
+    ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_SHADER_GATHER              , "SHADER_GATHER"              , Align(); );
+    ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_BACK_BUFFER_CAST           , "BACK_BUFFER_CAST"           , Align(); );
+    ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_TYPED_UNORDERED_ACCESS_VIEW, "TYPED_UNORDERED_ACCESS_VIEW", Align(); );
+    ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_SHADER_GATHER_COMPARISON   , "SHADER_GATHER_COMPARISON"   , Align(); );
+    ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_DECODER_OUTPUT             , "DECODER_OUTPUT"             , Align(); );
+    ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_VIDEO_PROCESSOR_OUTPUT     , "VIDEO_PROCESSOR_OUTPUT"     , Align(); );
+    ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_VIDEO_PROCESSOR_INPUT      , "VIDEO_PROCESSOR_INPUT"      , Align(); );
+    ADD_IF4(s, val, &  , D3D12_FORMAT_SUPPORT1_VIDEO_ENCODER              , "VIDEO_ENCODER"              , Align(); );
 
     return os << s;
 }
-
 std::ostream& operator<< (std::ostream& os, D3D12_FORMAT_SUPPORT2 val)
 {
     std::string s;
@@ -519,15 +506,20 @@ std::ostream& operator<< (std::ostream& os, D3D12_FORMAT_SUPPORT2 val)
     return os << s;
 }
 
+#pragma endregion os operators
+
 
 class D3D12FeatureViewer
 {
 public:
-    D3D12FeatureViewer() 
+    D3D12FeatureViewer()
+        : factory{}
+        , adapter{}
+        , device{}
     {
     }
 
-    ~D3D12FeatureViewer() 
+    ~D3D12FeatureViewer()
     {
 
     }
@@ -664,7 +656,7 @@ public:
             std::cout << "D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS: ";
             std::cout << (multisample_quality_levels.Format = (DXGI_FORMAT)i) << std::endl;
             std::cout << "--------------------------------------------------------------------------------------------------" << std::endl;
-			for (UINT j = 1; j < D3D12_MAX_MULTISAMPLE_SAMPLE_COUNT + 1; j *= 2)
+            for (UINT j = 1; j < D3D12_MAX_MULTISAMPLE_SAMPLE_COUNT + 1; j *= 2)
             {
                 multisample_quality_levels.SampleCount = j;
                 for (int k = 0; k < 2; k++)
@@ -724,9 +716,7 @@ public:
     bool Trace_D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS(std::ostream& os, const D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS& multisample_quality_levels)
     {
         //os << "D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS" << std::endl;
-        ADD_TAB(os); ADD_STR2(os, multisample_quality_levels, Format) << ", ";
-        /*ADD_TAB(os);*/ ADD_STR2(os, multisample_quality_levels, SampleCount) << ", ";
-        /*ADD_TAB(os);*/ ADD_STR(os, multisample_quality_levels, Flags);
+		ADD_TAB(os); ADD_STR2(os, multisample_quality_levels, Format) << ", "; ADD_STR2(os, multisample_quality_levels, SampleCount) << ", "; ADD_STR(os, multisample_quality_levels, Flags);
         ADD_TAB(os); ADD_STR(os, multisample_quality_levels, NumQualityLevels);
 
         return true;
@@ -905,6 +895,6 @@ int main(int argc, const char* argv[])
     D3D12FeatureViewer viewer;
     viewer.Init(0);
     viewer.CheckFeatureSupport();
-
+    
     return 0;
 }
