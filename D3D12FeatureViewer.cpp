@@ -546,7 +546,7 @@ public:
         return true;
     }
 
-    bool CheckFeatureSupport()
+    bool CheckFeatureSupport(std::ostream& os)
     {
         D3D_FEATURE_LEVEL feature_level_requests[] = { D3D_FEATURE_LEVEL_1_0_CORE 
                                                         , D3D_FEATURE_LEVEL_9_1 , D3D_FEATURE_LEVEL_9_2 , D3D_FEATURE_LEVEL_9_3
@@ -595,25 +595,25 @@ public:
         hr = device->CheckFeatureSupport(D3D12_FEATURE_D3D12_OPTIONS6                    , &d3d12_options6                    , sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS6                    ));
         hr = device->CheckFeatureSupport(D3D12_FEATURE_QUERY_META_COMMAND                , &query_meta_command                , sizeof(D3D12_FEATURE_DATA_QUERY_META_COMMAND                ));
 
-        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS                     (std::cout, d3d12_options);                      ADD_LINE(std::cout);
-        Trace_D3D12_FEATURE_DATA_ARCHITECTURE                      (std::cout, architecture);                       ADD_LINE(std::cout);
-        Trace_D3D12_FEATURE_DATA_FEATURE_LEVELS                    (std::cout, feature_levels);                     ADD_LINE(std::cout);
-        Trace_D3D12_FEATURE_DATA_GPU_VIRTUAL_ADDRESS_SUPPORT       (std::cout, gpu_virtual_address_support);        ADD_LINE(std::cout);
-        Trace_D3D12_FEATURE_DATA_SHADER_MODEL                      (std::cout, shader_model);                       ADD_LINE(std::cout);
-        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS1                    (std::cout, d3d12_options1);                     ADD_LINE(std::cout);
-        Trace_D3D12_FEATURE_DATA_PROTECTED_RESOURCE_SESSION_SUPPORT(std::cout, protected_resource_session_support); ADD_LINE(std::cout);
-        Trace_D3D12_FEATURE_DATA_ROOT_SIGNATURE                    (std::cout, root_signature);                     ADD_LINE(std::cout);
-        Trace_D3D12_FEATURE_DATA_ARCHITECTURE1                     (std::cout, architecture1);                      ADD_LINE(std::cout);
-        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS2                    (std::cout, d3d12_options2);                     ADD_LINE(std::cout);
-        Trace_D3D12_FEATURE_DATA_SHADER_CACHE                      (std::cout, shader_cache);                       ADD_LINE(std::cout);
-        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS3                    (std::cout, d3d12_options3);                     ADD_LINE(std::cout);
-        Trace_D3D12_FEATURE_DATA_EXISTING_HEAPS                    (std::cout, existing_heaps);                     ADD_LINE(std::cout);
-        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS4                    (std::cout, d3d12_options4);                     ADD_LINE(std::cout);
-        Trace_D3D12_FEATURE_DATA_SERIALIZATION                     (std::cout, serialization);                      ADD_LINE(std::cout);
-        Trace_D3D12_FEATURE_DATA_CROSS_NODE                        (std::cout, cross_node);                         ADD_LINE(std::cout);
-        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS5                    (std::cout, d3d12_options5);                     ADD_LINE(std::cout);
-        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS6                    (std::cout, d3d12_options6);                     ADD_LINE(std::cout);
-        Trace_D3D12_FEATURE_DATA_QUERY_META_COMMAND                (std::cout, query_meta_command);                 ADD_LINE(std::cout);
+        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS                     (os, d3d12_options);                      ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS1                    (os, d3d12_options1);                     ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS2                    (os, d3d12_options2);                     ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS3                    (os, d3d12_options3);                     ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS4                    (os, d3d12_options4);                     ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS5                    (os, d3d12_options5);                     ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS6                    (os, d3d12_options6);                     ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_ARCHITECTURE                      (os, architecture);                       ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_ARCHITECTURE1                     (os, architecture1);                      ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_FEATURE_LEVELS                    (os, feature_levels);                     ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_GPU_VIRTUAL_ADDRESS_SUPPORT       (os, gpu_virtual_address_support);        ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_SHADER_MODEL                      (os, shader_model);                       ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_PROTECTED_RESOURCE_SESSION_SUPPORT(os, protected_resource_session_support); ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_ROOT_SIGNATURE                    (os, root_signature);                     ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_SHADER_CACHE                      (os, shader_cache);                       ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_EXISTING_HEAPS                    (os, existing_heaps);                     ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_SERIALIZATION                     (os, serialization);                      ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_CROSS_NODE                        (os, cross_node);                         ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_QUERY_META_COMMAND                (os, query_meta_command);                 ADD_LINE(os);
 
         D3D12_FEATURE_DATA_COMMAND_QUEUE_PRIORITY command_queue_priority{};
         for (int i = 0; i < (int)D3D12_COMMAND_LIST_TYPE_VIDEO_ENCODE + 1; i++)
@@ -630,32 +630,32 @@ public:
                     throw std::exception(); break;
                 }
                 hr = device->CheckFeatureSupport(D3D12_FEATURE_COMMAND_QUEUE_PRIORITY, &command_queue_priority, sizeof(D3D12_FEATURE_DATA_COMMAND_QUEUE_PRIORITY));
-                Trace_D3D12_FEATURE_DATA_COMMAND_QUEUE_PRIORITY(std::cout, command_queue_priority); ADD_LINE(std::cout);
+                Trace_D3D12_FEATURE_DATA_COMMAND_QUEUE_PRIORITY(os, command_queue_priority); ADD_LINE(os);
             }
         }
 
         D3D12_FEATURE_DATA_FORMAT_SUPPORT format_support{};
-        D3D12_FEATURE_DATA_FORMAT_INFO    format_info   {};
-        for (int i = 1; i <= (int)DXGI_FORMAT_B4G4R4A4_UNORM + 1; i++)
+        D3D12_FEATURE_DATA_FORMAT_INFO    format_info{};
+        for (int i = 1; i < (int)DXGI_FORMAT_B4G4R4A4_UNORM + 1; i++)
         {
-            std::cout << "D3D12_FEATURE_DATA_FORMAT_SUPPORT/D3D12_FEATURE_DATA_FORMAT_INFO: ";
-            std::cout << (format_support.Format = format_info.Format = (DXGI_FORMAT)i) << std::endl;
-            std::cout << "--------------------------------------------------------------------------------------------------" << std::endl;
-            hr = device->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &format_support  , sizeof(D3D12_FEATURE_DATA_FORMAT_SUPPORT));
-            hr = device->CheckFeatureSupport(D3D12_FEATURE_FORMAT_INFO   , &format_info     , sizeof(D3D12_FEATURE_DATA_FORMAT_INFO));
+            os << "D3D12_FEATURE_DATA_FORMAT_SUPPORT/D3D12_FEATURE_DATA_FORMAT_INFO: ";
+            os << (format_support.Format = format_info.Format = (DXGI_FORMAT)i) << std::endl;
+            os << "--------------------------------------------------------------------------------------------------" << std::endl;
+            hr = device->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &format_support, sizeof(D3D12_FEATURE_DATA_FORMAT_SUPPORT));
+            hr = device->CheckFeatureSupport(D3D12_FEATURE_FORMAT_INFO, &format_info, sizeof(D3D12_FEATURE_DATA_FORMAT_INFO));
 
-            ADD_TAB(std::cout); ADD_STR(std::cout, format_support, Support1);
-            ADD_TAB(std::cout); ADD_STR(std::cout, format_support, Support2);
-            ADD_TAB(std::cout); ADD_STR(std::cout, (int)format_info, PlaneCount);
-            ADD_LINE(std::cout);
+            ADD_TAB(os); ADD_STR(os, format_support, Support1);
+            ADD_TAB(os); ADD_STR(os, format_support, Support2);
+            ADD_TAB(os); ADD_STR(os, (int)format_info, PlaneCount);
+            ADD_LINE(os);
         }
 
         D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS multisample_quality_levels{};
-        for (int i = 1; i <= (int)DXGI_FORMAT_B4G4R4A4_UNORM + 1; i++)
+        for (int i = 1; i < (int)DXGI_FORMAT_B4G4R4A4_UNORM + 1; i++)
         {
-            std::cout << "D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS: ";
-            std::cout << (multisample_quality_levels.Format = (DXGI_FORMAT)i) << std::endl;
-            std::cout << "--------------------------------------------------------------------------------------------------" << std::endl;
+            os << "D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS: ";
+            os << (multisample_quality_levels.Format = (DXGI_FORMAT)i) << std::endl;
+            os << "--------------------------------------------------------------------------------------------------" << std::endl;
             for (UINT j = 1; j < D3D12_MAX_MULTISAMPLE_SAMPLE_COUNT + 1; j *= 2)
             {
                 multisample_quality_levels.SampleCount = j;
@@ -663,11 +663,10 @@ public:
                 {
                     multisample_quality_levels.Flags = D3D12_MULTISAMPLE_QUALITY_LEVEL_FLAGS(k);
                     hr = device->CheckFeatureSupport(D3D12_FEATURE_MULTISAMPLE_QUALITY_LEVELS, &multisample_quality_levels, sizeof(D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS));
-                    Trace_D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS(std::cout, multisample_quality_levels);
+                    Trace_D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS(os, multisample_quality_levels);
                 }
-            
             }
-            ADD_LINE(std::cout);
+            ADD_LINE(os);
         }
 
         return true;
@@ -676,21 +675,21 @@ public:
     bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS& d3d12_options)
     {
         os << "D3D12_FEATURE_DATA_D3D12_OPTIONS" << std::endl;
-         ADD_TAB(os); ADD_STR3(os, d3d12_options, DoublePrecisionFloatShaderOps, "                                              ");
-         ADD_TAB(os); ADD_STR3(os, d3d12_options, OutputMergerLogicOp, "                                                        ");
-         ADD_TAB(os); ADD_STR3(os, d3d12_options, MinPrecisionSupport, "                                                        ");
-         ADD_TAB(os); ADD_STR3(os, d3d12_options, TiledResourcesTier, "                                                         ");
-         ADD_TAB(os); ADD_STR3(os, d3d12_options, ResourceBindingTier, "                                                        ");
-         ADD_TAB(os); ADD_STR3(os, d3d12_options, PSSpecifiedStencilRefSupported, "                                             ");
-         ADD_TAB(os); ADD_STR3(os, d3d12_options, TypedUAVLoadAdditionalFormats, "                                              ");
-         ADD_TAB(os); ADD_STR3(os, d3d12_options, ROVsSupported, "                                                              ");
-         ADD_TAB(os); ADD_STR3(os, d3d12_options, ConservativeRasterizationTier, "                                              ");
-         ADD_TAB(os); ADD_STR3(os, d3d12_options, MaxGPUVirtualAddressBitsPerResource, "                                        ");
-         ADD_TAB(os); ADD_STR3(os, d3d12_options, StandardSwizzle64KBSupported, "                                               ");
-         ADD_TAB(os); ADD_STR3(os, d3d12_options, CrossNodeSharingTier, "                                                       ");
-         ADD_TAB(os); ADD_STR3(os, d3d12_options, CrossAdapterRowMajorTextureSupported, "                                       ");
-         ADD_TAB(os); ADD_STR3(os, d3d12_options, VPAndRTArrayIndexFromAnyShaderFeedingRasterizerSupportedWithoutGSEmulation, " ");
-         ADD_TAB(os); ADD_STR3(os, d3d12_options, ResourceHeapTier, "                                                           ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options, DoublePrecisionFloatShaderOps, "                                              ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options, OutputMergerLogicOp, "                                                        ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options, MinPrecisionSupport, "                                                        ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options, TiledResourcesTier, "                                                         ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options, ResourceBindingTier, "                                                        ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options, PSSpecifiedStencilRefSupported, "                                             ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options, TypedUAVLoadAdditionalFormats, "                                              ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options, ROVsSupported, "                                                              ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options, ConservativeRasterizationTier, "                                              ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options, MaxGPUVirtualAddressBitsPerResource, "                                        ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options, StandardSwizzle64KBSupported, "                                               ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options, CrossNodeSharingTier, "                                                       ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options, CrossAdapterRowMajorTextureSupported, "                                       ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options, VPAndRTArrayIndexFromAnyShaderFeedingRasterizerSupportedWithoutGSEmulation, " ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options, ResourceHeapTier, "                                                           ");
 
         return true;
     };
@@ -724,8 +723,8 @@ public:
     bool Trace_D3D12_FEATURE_DATA_GPU_VIRTUAL_ADDRESS_SUPPORT(std::ostream& os, const D3D12_FEATURE_DATA_GPU_VIRTUAL_ADDRESS_SUPPORT& gpu_virtual_address_support)
     {
         os << "D3D12_FEATURE_DATA_GPU_VIRTUAL_ADDRESS_SUPPORT" << std::endl;
-        ADD_TAB(os); ADD_STR(os, gpu_virtual_address_support, MaxGPUVirtualAddressBitsPerResource);
-        ADD_TAB(os); ADD_STR(os, gpu_virtual_address_support, MaxGPUVirtualAddressBitsPerProcess);
+        ADD_TAB(os); ADD_STR3(os, gpu_virtual_address_support, MaxGPUVirtualAddressBitsPerResource, " ");
+        ADD_TAB(os); ADD_STR3(os, gpu_virtual_address_support, MaxGPUVirtualAddressBitsPerProcess, "  ");
 
         return true;
     };
@@ -894,7 +893,7 @@ int main(int argc, const char* argv[])
 {
     D3D12FeatureViewer viewer;
     viewer.Init(0);
-    viewer.CheckFeatureSupport();
+    viewer.CheckFeatureSupport(std::cout);
     
     return 0;
 }
