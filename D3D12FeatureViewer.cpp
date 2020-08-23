@@ -1,5 +1,7 @@
 ﻿#include <iostream>
+#include <iomanip>
 #include <sstream>
+#include <vector>
 
 #include <dxgi1_6.h>
 #include <d3d12.h>
@@ -27,6 +29,33 @@ using Ptr = Microsoft::WRL::ComPtr<T>;
 #define ADD_TAB(x) x << "\t"
 
 void AddBar(std::string& x) { if (!x.empty()) x += " | "; }
+
+#define FW std::setfill('0') << std::setw(2) 
+
+inline std::string GetUUIDString(const uint8_t _uuid[16])
+{
+    std::stringstream ss;
+    ss << std::hex 
+        << FW << (uint32_t)_uuid[0]  << FW << (uint32_t)_uuid[1] << FW << (uint32_t)_uuid[2] << FW << (uint32_t)_uuid[3] << "-"
+        << FW << (uint32_t)_uuid[4]  << FW << (uint32_t)_uuid[5] << "-"
+        << FW << (uint32_t)_uuid[6]  << FW << (uint32_t)_uuid[7] << "-"
+        << FW << (uint32_t)_uuid[8]  << FW << (uint32_t)_uuid[9] << "-"
+        << FW << (uint32_t)_uuid[10] << FW << (uint32_t)_uuid[11] << FW << (uint32_t)_uuid[12] << FW << (uint32_t)_uuid[13] << FW << (uint32_t)_uuid[14] << FW << (uint32_t)_uuid[15]
+        << std::dec;
+    return ss.str();
+}
+
+inline std::string GetLUIDString(const uint8_t _luid[8])
+{
+    std::stringstream ss;
+    ss << std::hex
+        << "Low: "    << FW << (uint32_t)_luid[0] << FW << (uint32_t)_luid[1] << FW << (uint32_t)_luid[2] << FW << (uint32_t)_luid[3]
+        << ", High: " << FW << (uint32_t)_luid[4] << FW << (uint32_t)_luid[5] << FW << (uint32_t)_luid[6] << FW << (uint32_t)_luid[7]
+        << std::dec;
+    return ss.str();
+}
+
+#undef FW
 
 #pragma region D3D12_FEATURE_DATA_D3D12_OPTIONS
 
@@ -268,8 +297,8 @@ std::ostream& operator<< (std::ostream& os, DXGI_FORMAT val)
 std::ostream& operator<< (std::ostream& os, D3D12_MULTISAMPLE_QUALITY_LEVEL_FLAGS val)
 {
     std::string s;
-    ADD_IF2(s, val, == , D3D12_MULTISAMPLE_QUALITY_LEVELS_FLAG_NONE);
-    ADD_IF2(s, val, &, D3D12_MULTISAMPLE_QUALITY_LEVELS_FLAG_TILED_RESOURCE);
+    ADD_IF3(s, val, == , D3D12_MULTISAMPLE_QUALITY_LEVELS_FLAG_NONE, "NONE");
+    ADD_IF3(s, val, & , D3D12_MULTISAMPLE_QUALITY_LEVELS_FLAG_TILED_RESOURCE, "TILED_RESOURCE");
 
     return os << s;
 }
@@ -505,6 +534,77 @@ std::ostream& operator<< (std::ostream& os, D3D12_FORMAT_SUPPORT2 val)
 
     return os << s;
 }
+std::ostream& operator<< (std::ostream& os, const GUID& val)
+{
+    std::string s;
+    return os << GetUUIDString(reinterpret_cast<const uint8_t*>(&val));
+}
+std::ostream& operator<< (std::ostream& os, D3D12_MESH_SHADER_TIER val)
+{
+    std::string s;
+    switch (val)
+    {
+        CASE_ADD(s, D3D12_MESH_SHADER_TIER_NOT_SUPPORTED);
+        CASE_ADD(s, D3D12_MESH_SHADER_TIER_1);
+    default:
+        break;
+    }
+
+    return os << s;
+}
+std::ostream& operator<< (std::ostream& os, D3D12_SAMPLER_FEEDBACK_TIER val)
+{
+    std::string s;
+    switch (val)
+    {
+        CASE_ADD(s, D3D12_SAMPLER_FEEDBACK_TIER_NOT_SUPPORTED);
+        CASE_ADD(s, D3D12_SAMPLER_FEEDBACK_TIER_0_9);
+        CASE_ADD(s, D3D12_SAMPLER_FEEDBACK_TIER_1_0);
+    default:
+        break;
+    }
+
+    return os << s;
+}
+std::ostream& operator<< (std::ostream& os, D3D12_FEATURE val)
+{
+    std::string s;
+
+    switch (val)
+    {
+        CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS);
+        CASE_ADD(s, D3D12_FEATURE_ARCHITECTURE);
+        CASE_ADD(s, D3D12_FEATURE_FEATURE_LEVELS);
+        CASE_ADD(s, D3D12_FEATURE_FORMAT_SUPPORT);
+        CASE_ADD(s, D3D12_FEATURE_MULTISAMPLE_QUALITY_LEVELS);
+        CASE_ADD(s, D3D12_FEATURE_FORMAT_INFO);
+        CASE_ADD(s, D3D12_FEATURE_GPU_VIRTUAL_ADDRESS_SUPPORT);
+        CASE_ADD(s, D3D12_FEATURE_SHADER_MODEL);
+        CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS1);
+        CASE_ADD(s, D3D12_FEATURE_PROTECTED_RESOURCE_SESSION_SUPPORT);
+        CASE_ADD(s, D3D12_FEATURE_ROOT_SIGNATURE);
+        CASE_ADD(s, D3D12_FEATURE_ARCHITECTURE1);
+        CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS2);
+        CASE_ADD(s, D3D12_FEATURE_SHADER_CACHE);
+        CASE_ADD(s, D3D12_FEATURE_COMMAND_QUEUE_PRIORITY);
+        CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS3);
+        CASE_ADD(s, D3D12_FEATURE_EXISTING_HEAPS);
+        CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS4);
+        CASE_ADD(s, D3D12_FEATURE_SERIALIZATION);
+        CASE_ADD(s, D3D12_FEATURE_CROSS_NODE);
+        CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS5);
+        CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS6);
+        CASE_ADD(s, D3D12_FEATURE_QUERY_META_COMMAND);
+        CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS7);
+        CASE_ADD(s, D3D12_FEATURE_PROTECTED_RESOURCE_SESSION_TYPE_COUNT);
+        CASE_ADD(s, D3D12_FEATURE_PROTECTED_RESOURCE_SESSION_TYPES);
+    default:
+        break;
+    }
+
+    return os << s;
+}
+
 
 #pragma endregion os operators
 
@@ -524,76 +624,191 @@ public:
 
     }
 
-    bool Init(int adapter_index)
+    bool Init(UINT adapter_index)
     {
         {
             Ptr<ID3D12Debug> debug_controller;
             if (FAILED(D3D12GetDebugInterface(IID_PPV_ARGS(&debug_controller))))
+            {
+                std::cout << "Failed to get debug interface." << std::endl;
                 return false;
+            }
 
             debug_controller->EnableDebugLayer();
         }
 
         if (FAILED(CreateDXGIFactory2(DXGI_CREATE_FACTORY_DEBUG, IID_PPV_ARGS(&factory))))
+        {
+            std::cout << "Failed to create dxgi factory." << std::endl;
             return false;
+        }
 
         if (FAILED(factory->EnumAdapters1(adapter_index, &adapter)))
+        {
+            std::cout << "Failed to enumerate dxgi adapter." << std::endl;
             return false;
+        }
+
+
+        DXGI_ADAPTER_DESC1 desc{};
+        adapter->GetDesc1(&desc);
+        std::cout << std::endl;
+        std::cout << "DXGI_ADAPTER_DESC1: index " << adapter_index << std::endl;
+        std::wcout  <<L"\tDescription           = " << desc.Description                                                             << std::endl;
+        std::cout   << "\tVendorId              = " << std::hex << desc.VendorId << std::dec                                        << std::endl;
+        std::cout   << "\tDeviceId              = " << std::hex << desc.DeviceId << std::dec                                        << std::endl;
+        std::cout   << "\tSubSysId              = " << std::hex << desc.SubSysId << std::dec                                        << std::endl;
+        std::cout   << "\tRevision              = " << desc.Revision                                                                << std::endl;
+        std::cout   << "\tDedicatedVideoMemory  = " << desc.DedicatedVideoMemory                                                    << std::endl;
+        std::cout   << "\tDedicatedSystemMemory = " << desc.DedicatedSystemMemory                                                   << std::endl;
+        std::cout   << "\tSharedSystemMemory    = " << desc.SharedSystemMemory                                                      << std::endl;
+        std::cout   << "\tAdapterLuid           = " << GetLUIDString(reinterpret_cast<const uint8_t*>(&desc.AdapterLuid.LowPart))   << std::endl;
+        std::cout   << "\tFlags                 = " << std::hex << desc.Flags << std::dec                                           << std::endl;
+        std::cout << std::endl;
+        std::cout << std::endl;
 
         if (FAILED(D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_11_1, IID_PPV_ARGS(&device))))
+        {
+            std::cout << "Failed to create device." << std::endl;
             return false;
+        }
 
         return true;
     }
 
-    bool CheckFeatureSupport(std::ostream& os)
+    bool CheckFormatSupports(std::ostream& os, bool is_show_msql) 
     {
-        D3D_FEATURE_LEVEL feature_level_requests[] = { D3D_FEATURE_LEVEL_1_0_CORE 
-                                                        , D3D_FEATURE_LEVEL_9_1 , D3D_FEATURE_LEVEL_9_2 , D3D_FEATURE_LEVEL_9_3
-                                                        , D3D_FEATURE_LEVEL_10_0 , D3D_FEATURE_LEVEL_10_1
-                                                        , D3D_FEATURE_LEVEL_11_0 , D3D_FEATURE_LEVEL_11_1
-                                                        , D3D_FEATURE_LEVEL_12_0 , D3D_FEATURE_LEVEL_12_1 
-        };
-        D3D12_FEATURE_DATA_D3D12_OPTIONS                      d3d12_options                     {};
-        D3D12_FEATURE_DATA_ARCHITECTURE                       architecture                      {};
-        D3D12_FEATURE_DATA_FEATURE_LEVELS                     feature_levels                    { _countof(feature_level_requests),feature_level_requests };
-        D3D12_FEATURE_DATA_GPU_VIRTUAL_ADDRESS_SUPPORT        gpu_virtual_address_support       {};
-        D3D12_FEATURE_DATA_SHADER_MODEL                       shader_model                      { D3D_SHADER_MODEL_6_5 };
-        D3D12_FEATURE_DATA_D3D12_OPTIONS1                     d3d12_options1                    {};
-        D3D12_FEATURE_DATA_PROTECTED_RESOURCE_SESSION_SUPPORT protected_resource_session_support{};
-        D3D12_FEATURE_DATA_ROOT_SIGNATURE                     root_signature                    { D3D_ROOT_SIGNATURE_VERSION_1_1 };
-        D3D12_FEATURE_DATA_ARCHITECTURE1                      architecture1                     {};
-        D3D12_FEATURE_DATA_D3D12_OPTIONS2                     d3d12_options2                    {};
-        D3D12_FEATURE_DATA_SHADER_CACHE                       shader_cache                      {};
-        D3D12_FEATURE_DATA_D3D12_OPTIONS3                     d3d12_options3                    {};
-        D3D12_FEATURE_DATA_EXISTING_HEAPS                     existing_heaps                    {};
-        D3D12_FEATURE_DATA_D3D12_OPTIONS4                     d3d12_options4                    {};
-        D3D12_FEATURE_DATA_SERIALIZATION                      serialization                     {};
-        D3D12_FEATURE_DATA_CROSS_NODE                         cross_node                        {};
-        D3D12_FEATURE_DATA_D3D12_OPTIONS5                     d3d12_options5                    {};
-        D3D12_FEATURE_DATA_D3D12_OPTIONS6                     d3d12_options6                    {};
-        D3D12_FEATURE_DATA_QUERY_META_COMMAND                 query_meta_command                {};
+        os << "D3D12_FEATURE_DATA_FORMAT_SUPPORT/D3D12_FEATURE_DATA_FORMAT_INFO: " << std::endl;
 
-        HRESULT hr;
-        hr = device->CheckFeatureSupport(D3D12_FEATURE_D3D12_OPTIONS                     , &d3d12_options                     , sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS                     ));
-        hr = device->CheckFeatureSupport(D3D12_FEATURE_ARCHITECTURE                      , &architecture                      , sizeof(D3D12_FEATURE_DATA_ARCHITECTURE                      ));
-        hr = device->CheckFeatureSupport(D3D12_FEATURE_FEATURE_LEVELS                    , &feature_levels                    , sizeof(D3D12_FEATURE_DATA_FEATURE_LEVELS                    ));
-        hr = device->CheckFeatureSupport(D3D12_FEATURE_GPU_VIRTUAL_ADDRESS_SUPPORT       , &gpu_virtual_address_support       , sizeof(D3D12_FEATURE_DATA_GPU_VIRTUAL_ADDRESS_SUPPORT       ));
-        hr = device->CheckFeatureSupport(D3D12_FEATURE_SHADER_MODEL                      , &shader_model                      , sizeof(D3D12_FEATURE_DATA_SHADER_MODEL                      ));
-        hr = device->CheckFeatureSupport(D3D12_FEATURE_D3D12_OPTIONS1                    , &d3d12_options1                    , sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS1                    ));
-        hr = device->CheckFeatureSupport(D3D12_FEATURE_PROTECTED_RESOURCE_SESSION_SUPPORT, &protected_resource_session_support, sizeof(D3D12_FEATURE_DATA_PROTECTED_RESOURCE_SESSION_SUPPORT));
-        hr = device->CheckFeatureSupport(D3D12_FEATURE_ROOT_SIGNATURE                    , &root_signature                    , sizeof(D3D12_FEATURE_DATA_ROOT_SIGNATURE                    ));
-        hr = device->CheckFeatureSupport(D3D12_FEATURE_ARCHITECTURE1                     , &architecture1                     , sizeof(D3D12_FEATURE_DATA_ARCHITECTURE1                     ));
-        hr = device->CheckFeatureSupport(D3D12_FEATURE_D3D12_OPTIONS2                    , &d3d12_options2                    , sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS2                    ));
-        hr = device->CheckFeatureSupport(D3D12_FEATURE_SHADER_CACHE                      , &shader_cache                      , sizeof(D3D12_FEATURE_DATA_SHADER_CACHE                      ));
-        hr = device->CheckFeatureSupport(D3D12_FEATURE_D3D12_OPTIONS3                    , &d3d12_options3                    , sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS3                    ));
-        hr = device->CheckFeatureSupport(D3D12_FEATURE_EXISTING_HEAPS                    , &existing_heaps                    , sizeof(D3D12_FEATURE_DATA_EXISTING_HEAPS                    ));
-        hr = device->CheckFeatureSupport(D3D12_FEATURE_D3D12_OPTIONS4                    , &d3d12_options4                    , sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS4                    ));
-        hr = device->CheckFeatureSupport(D3D12_FEATURE_SERIALIZATION                     , &serialization                     , sizeof(D3D12_FEATURE_DATA_SERIALIZATION                     ));
-        hr = device->CheckFeatureSupport(D3D12_FEATURE_CROSS_NODE                        , &cross_node                        , sizeof(D3D12_FEATURE_DATA_CROSS_NODE                        ));
-        hr = device->CheckFeatureSupport(D3D12_FEATURE_D3D12_OPTIONS5                    , &d3d12_options5                    , sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS5                    ));
-        hr = device->CheckFeatureSupport(D3D12_FEATURE_D3D12_OPTIONS6                    , &d3d12_options6                    , sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS6                    ));
-        hr = device->CheckFeatureSupport(D3D12_FEATURE_QUERY_META_COMMAND                , &query_meta_command                , sizeof(D3D12_FEATURE_DATA_QUERY_META_COMMAND                ));
+        D3D12_FEATURE f;
+        auto CheckHR = [&](HRESULT hr) { if (FAILED(hr)) { os << "Failed to get " << f << '.' << "(or the format was not supported.)"<<std::endl; } };
+
+        D3D12_FEATURE_DATA_FORMAT_SUPPORT format_support{};
+        D3D12_FEATURE_DATA_FORMAT_INFO    format_info{};
+        D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS multisample_quality_levels{};
+        for (int i = 1; i < (int)DXGI_FORMAT_B4G4R4A4_UNORM + 1; i++)
+        {
+            os << (format_support.Format = format_info.Format = (DXGI_FORMAT)i) << std::endl;
+            os << "--------------------------------------------------------------------------------------------------" << std::endl;
+            CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_FORMAT_SUPPORT), &format_support, sizeof(D3D12_FEATURE_DATA_FORMAT_SUPPORT)));
+            CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_FORMAT_INFO)   , &format_info   , sizeof(D3D12_FEATURE_DATA_FORMAT_INFO)));
+
+            ADD_TAB(os); ADD_STR(os, format_support, Support1);
+            ADD_TAB(os); ADD_STR(os, format_support, Support2);
+            ADD_TAB(os); ADD_STR(os, (int)format_info, PlaneCount);
+
+            if (is_show_msql)
+            {
+
+                os << "D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS: " << std::endl;
+                multisample_quality_levels.Format = format_support.Format;
+                for (UINT j = 1; j < D3D12_MAX_MULTISAMPLE_SAMPLE_COUNT + 1; j *= 2)
+                {
+                    multisample_quality_levels.SampleCount = j;
+                    for (int k = 0; k < 2; k++)
+                    {
+                        multisample_quality_levels.Flags = D3D12_MULTISAMPLE_QUALITY_LEVEL_FLAGS(k);
+                        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_MULTISAMPLE_QUALITY_LEVELS), &multisample_quality_levels, sizeof(D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS)));
+                        Trace_D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS(os, multisample_quality_levels);
+                    }
+                }
+            }
+
+            ADD_LINE(os);
+        }
+        return true;
+    }
+
+    bool CheckQueuePrioritySupports(std::ostream& os) 
+    {
+        auto CheckHR = [&](HRESULT hr) { if (FAILED(hr)) { os << "Failed to get " << D3D12_FEATURE_COMMAND_QUEUE_PRIORITY << '.' << std::endl; } };
+
+        os << "D3D12_FEATURE_DATA_COMMAND_QUEUE_PRIORITY: " << std::endl;
+        os << "--------------------------------------------------------------------------------------------------" << std::endl;
+        D3D12_FEATURE_DATA_COMMAND_QUEUE_PRIORITY command_queue_priority{};
+        for (int i = 0; i < (int)D3D12_COMMAND_LIST_TYPE_VIDEO_ENCODE + 1; i++)
+        {
+            command_queue_priority.CommandListType = D3D12_COMMAND_LIST_TYPE(i);
+            for (int j = 0; j < 3; j++)
+            {
+                switch (j)
+                {
+                case 0: command_queue_priority.Priority = D3D12_COMMAND_QUEUE_PRIORITY_NORMAL;          break;
+                case 1: command_queue_priority.Priority = D3D12_COMMAND_QUEUE_PRIORITY_HIGH;            break;
+                case 2: command_queue_priority.Priority = D3D12_COMMAND_QUEUE_PRIORITY_GLOBAL_REALTIME; break;
+                default:
+                    throw std::exception(); break;
+                }
+                CheckHR(device->CheckFeatureSupport(D3D12_FEATURE_COMMAND_QUEUE_PRIORITY, &command_queue_priority, sizeof(D3D12_FEATURE_DATA_COMMAND_QUEUE_PRIORITY)));
+                Trace_D3D12_FEATURE_DATA_COMMAND_QUEUE_PRIORITY(os, command_queue_priority); ADD_LINE(os);
+            }
+        }
+        return true;
+    }
+
+    bool CheckFeatureSupport(std::ostream& os, UINT node_index)
+    {
+        D3D_FEATURE_LEVEL feature_level_requests[] = { D3D_FEATURE_LEVEL_1_0_CORE
+                                                     , D3D_FEATURE_LEVEL_9_1  , D3D_FEATURE_LEVEL_9_2 , D3D_FEATURE_LEVEL_9_3
+                                                     , D3D_FEATURE_LEVEL_10_0 , D3D_FEATURE_LEVEL_10_1
+                                                     , D3D_FEATURE_LEVEL_11_0 , D3D_FEATURE_LEVEL_11_1
+                                                     , D3D_FEATURE_LEVEL_12_0 , D3D_FEATURE_LEVEL_12_1
+        };
+        D3D12_FEATURE_DATA_D3D12_OPTIONS                            d3d12_options                         {};
+        D3D12_FEATURE_DATA_ARCHITECTURE                             architecture                          { node_index };
+        D3D12_FEATURE_DATA_FEATURE_LEVELS                           feature_levels                        { _countof(feature_level_requests),feature_level_requests };
+        D3D12_FEATURE_DATA_GPU_VIRTUAL_ADDRESS_SUPPORT              gpu_virtual_address_support           {};
+        D3D12_FEATURE_DATA_SHADER_MODEL                             shader_model                          { D3D_SHADER_MODEL_6_5 };
+        D3D12_FEATURE_DATA_D3D12_OPTIONS1                           d3d12_options1                        {};
+        D3D12_FEATURE_DATA_PROTECTED_RESOURCE_SESSION_SUPPORT       protected_resource_session_support    { node_index };
+        D3D12_FEATURE_DATA_ROOT_SIGNATURE                           root_signature                        { D3D_ROOT_SIGNATURE_VERSION_1_1 };
+        D3D12_FEATURE_DATA_ARCHITECTURE1                            architecture1                         { node_index };
+        D3D12_FEATURE_DATA_D3D12_OPTIONS2                           d3d12_options2                        {};
+        D3D12_FEATURE_DATA_SHADER_CACHE                             shader_cache                          {};
+        D3D12_FEATURE_DATA_D3D12_OPTIONS3                           d3d12_options3                        {};
+        D3D12_FEATURE_DATA_EXISTING_HEAPS                           existing_heaps                        {};
+        D3D12_FEATURE_DATA_D3D12_OPTIONS4                           d3d12_options4                        {};
+        D3D12_FEATURE_DATA_SERIALIZATION                            serialization                         { node_index };
+        D3D12_FEATURE_DATA_CROSS_NODE                               cross_node                            {};
+        D3D12_FEATURE_DATA_D3D12_OPTIONS5                           d3d12_options5                        {};
+        D3D12_FEATURE_DATA_D3D12_OPTIONS6                           d3d12_options6                        {};
+        D3D12_FEATURE_DATA_QUERY_META_COMMAND                       query_meta_command                    {};
+
+        D3D12_FEATURE_DATA_D3D12_OPTIONS7                           d3d12_options7                        {};
+        D3D12_FEATURE_DATA_PROTECTED_RESOURCE_SESSION_TYPE_COUNT    protected_resource_session_type_count { node_index };
+        D3D12_FEATURE_DATA_PROTECTED_RESOURCE_SESSION_TYPES         protected_resource_session_types      {};
+        std::vector<GUID>                                           session_types;
+
+        D3D12_FEATURE f;
+        auto CheckHR = [&](HRESULT hr) { if (FAILED(hr)) { os << "Failed to get " << f << '.' << std::endl; } };
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS                     ), &d3d12_options                     , sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS                     )));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_ARCHITECTURE                      ), &architecture                      , sizeof(D3D12_FEATURE_DATA_ARCHITECTURE                      )));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_FEATURE_LEVELS                    ), &feature_levels                    , sizeof(D3D12_FEATURE_DATA_FEATURE_LEVELS                    )));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_GPU_VIRTUAL_ADDRESS_SUPPORT       ), &gpu_virtual_address_support       , sizeof(D3D12_FEATURE_DATA_GPU_VIRTUAL_ADDRESS_SUPPORT       )));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_SHADER_MODEL                      ), &shader_model                      , sizeof(D3D12_FEATURE_DATA_SHADER_MODEL                      )));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS1                    ), &d3d12_options1                    , sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS1                    )));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_PROTECTED_RESOURCE_SESSION_SUPPORT), &protected_resource_session_support, sizeof(D3D12_FEATURE_DATA_PROTECTED_RESOURCE_SESSION_SUPPORT)));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_ROOT_SIGNATURE                    ), &root_signature                    , sizeof(D3D12_FEATURE_DATA_ROOT_SIGNATURE                    )));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_ARCHITECTURE1                     ), &architecture1                     , sizeof(D3D12_FEATURE_DATA_ARCHITECTURE1                     )));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS2                    ), &d3d12_options2                    , sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS2                    )));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_SHADER_CACHE                      ), &shader_cache                      , sizeof(D3D12_FEATURE_DATA_SHADER_CACHE                      )));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS3                    ), &d3d12_options3                    , sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS3                    )));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_EXISTING_HEAPS                    ), &existing_heaps                    , sizeof(D3D12_FEATURE_DATA_EXISTING_HEAPS                    )));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS4                    ), &d3d12_options4                    , sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS4                    )));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_SERIALIZATION                     ), &serialization                     , sizeof(D3D12_FEATURE_DATA_SERIALIZATION                     )));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_CROSS_NODE                        ), &cross_node                        , sizeof(D3D12_FEATURE_DATA_CROSS_NODE                        )));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS5                    ), &d3d12_options5                    , sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS5                    )));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS6                    ), &d3d12_options6                    , sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS6                    )));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_QUERY_META_COMMAND                ), &query_meta_command                , sizeof(D3D12_FEATURE_DATA_QUERY_META_COMMAND                )));
+
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_PROTECTED_RESOURCE_SESSION_TYPE_COUNT), &protected_resource_session_type_count, sizeof(D3D12_FEATURE_DATA_PROTECTED_RESOURCE_SESSION_TYPE_COUNT)));
+        session_types.resize(protected_resource_session_type_count.Count);
+        protected_resource_session_types.Count  = (UINT)session_types.size();
+        protected_resource_session_types.pTypes = session_types.data();
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_PROTECTED_RESOURCE_SESSION_TYPES     ), &protected_resource_session_types     , sizeof(D3D12_FEATURE_DATA_PROTECTED_RESOURCE_SESSION_TYPES     )));
+
+        ADD_LINE(os);
+        ADD_LINE(os);
 
         Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS                     (os, d3d12_options);                      ADD_LINE(os);
         Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS1                    (os, d3d12_options1);                     ADD_LINE(os);
@@ -602,6 +817,7 @@ public:
         Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS4                    (os, d3d12_options4);                     ADD_LINE(os);
         Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS5                    (os, d3d12_options5);                     ADD_LINE(os);
         Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS6                    (os, d3d12_options6);                     ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS7                    (os, d3d12_options7);                     ADD_LINE(os);
         Trace_D3D12_FEATURE_DATA_ARCHITECTURE                      (os, architecture);                       ADD_LINE(os);
         Trace_D3D12_FEATURE_DATA_ARCHITECTURE1                     (os, architecture1);                      ADD_LINE(os);
         Trace_D3D12_FEATURE_DATA_FEATURE_LEVELS                    (os, feature_levels);                     ADD_LINE(os);
@@ -615,59 +831,8 @@ public:
         Trace_D3D12_FEATURE_DATA_CROSS_NODE                        (os, cross_node);                         ADD_LINE(os);
         Trace_D3D12_FEATURE_DATA_QUERY_META_COMMAND                (os, query_meta_command);                 ADD_LINE(os);
 
-        D3D12_FEATURE_DATA_COMMAND_QUEUE_PRIORITY command_queue_priority{};
-        for (int i = 0; i < (int)D3D12_COMMAND_LIST_TYPE_VIDEO_ENCODE + 1; i++)
-        {
-            command_queue_priority.CommandListType = D3D12_COMMAND_LIST_TYPE(i);
-            for (int j = 0; j < 3; j++)
-            {
-                switch (j)
-                {
-                case 0: command_queue_priority.Priority = D3D12_COMMAND_QUEUE_PRIORITY_NORMAL; break;
-                case 1: command_queue_priority.Priority = D3D12_COMMAND_QUEUE_PRIORITY_HIGH; break;
-                case 2: command_queue_priority.Priority = D3D12_COMMAND_QUEUE_PRIORITY_GLOBAL_REALTIME; break;
-                default: 
-                    throw std::exception(); break;
-                }
-                hr = device->CheckFeatureSupport(D3D12_FEATURE_COMMAND_QUEUE_PRIORITY, &command_queue_priority, sizeof(D3D12_FEATURE_DATA_COMMAND_QUEUE_PRIORITY));
-                Trace_D3D12_FEATURE_DATA_COMMAND_QUEUE_PRIORITY(os, command_queue_priority); ADD_LINE(os);
-            }
-        }
-
-        D3D12_FEATURE_DATA_FORMAT_SUPPORT format_support{};
-        D3D12_FEATURE_DATA_FORMAT_INFO    format_info{};
-        for (int i = 1; i < (int)DXGI_FORMAT_B4G4R4A4_UNORM + 1; i++)
-        {
-            os << "D3D12_FEATURE_DATA_FORMAT_SUPPORT/D3D12_FEATURE_DATA_FORMAT_INFO: ";
-            os << (format_support.Format = format_info.Format = (DXGI_FORMAT)i) << std::endl;
-            os << "--------------------------------------------------------------------------------------------------" << std::endl;
-            hr = device->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &format_support, sizeof(D3D12_FEATURE_DATA_FORMAT_SUPPORT));
-            hr = device->CheckFeatureSupport(D3D12_FEATURE_FORMAT_INFO, &format_info, sizeof(D3D12_FEATURE_DATA_FORMAT_INFO));
-
-            ADD_TAB(os); ADD_STR(os, format_support, Support1);
-            ADD_TAB(os); ADD_STR(os, format_support, Support2);
-            ADD_TAB(os); ADD_STR(os, (int)format_info, PlaneCount);
-            ADD_LINE(os);
-        }
-
-        D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS multisample_quality_levels{};
-        for (int i = 1; i < (int)DXGI_FORMAT_B4G4R4A4_UNORM + 1; i++)
-        {
-            os << "D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS: ";
-            os << (multisample_quality_levels.Format = (DXGI_FORMAT)i) << std::endl;
-            os << "--------------------------------------------------------------------------------------------------" << std::endl;
-            for (UINT j = 1; j < D3D12_MAX_MULTISAMPLE_SAMPLE_COUNT + 1; j *= 2)
-            {
-                multisample_quality_levels.SampleCount = j;
-                for (int k = 0; k < 2; k++)
-                {
-                    multisample_quality_levels.Flags = D3D12_MULTISAMPLE_QUALITY_LEVEL_FLAGS(k);
-                    hr = device->CheckFeatureSupport(D3D12_FEATURE_MULTISAMPLE_QUALITY_LEVELS, &multisample_quality_levels, sizeof(D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS));
-                    Trace_D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS(os, multisample_quality_levels);
-                }
-            }
-            ADD_LINE(os);
-        }
+        Trace_D3D12_FEATURE_DATA_PROTECTED_RESOURCE_SESSION_TYPE_COUNT  (os, protected_resource_session_type_count);            ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_PROTECTED_RESOURCE_SESSION_TYPES       (os, protected_resource_session_types, session_types);  ADD_LINE(os);
 
         return true;
     }
@@ -693,7 +858,6 @@ public:
 
         return true;
     };
-
     bool Trace_D3D12_FEATURE_DATA_ARCHITECTURE(std::ostream& os, const D3D12_FEATURE_DATA_ARCHITECTURE& architecture)
     {
         os << "D3D12_FEATURE_DATA_ARCHITECTURE" << std::endl;
@@ -704,7 +868,6 @@ public:
 
         return true;
     };
-
     bool Trace_D3D12_FEATURE_DATA_FEATURE_LEVELS(std::ostream& os, const D3D12_FEATURE_DATA_FEATURE_LEVELS& feature_levels)
     {
         os << "D3D12_FEATURE_DATA_FEATURE_LEVELS" << std::endl;
@@ -715,8 +878,7 @@ public:
     bool Trace_D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS(std::ostream& os, const D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS& multisample_quality_levels)
     {
         //os << "D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS" << std::endl;
-		ADD_TAB(os); ADD_STR2(os, multisample_quality_levels, Format) << ", "; ADD_STR2(os, multisample_quality_levels, SampleCount) << ", "; ADD_STR(os, multisample_quality_levels, Flags);
-        ADD_TAB(os); ADD_STR(os, multisample_quality_levels, NumQualityLevels);
+        ADD_TAB(os); ADD_STR2(os, multisample_quality_levels, NumQualityLevels) << " where: "; ADD_STR2(os, multisample_quality_levels, SampleCount) << ", "; ADD_STR(os, multisample_quality_levels, Flags);
 
         return true;
     };
@@ -775,7 +937,7 @@ public:
     };
     bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS2(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS2& d3d12_options2)
     {
-        os << "D3D12_FEATURE_DATA_ARCHITECTURE1" << std::endl;
+        os << "D3D12_FEATURE_DATA_D3D12_OPTIONS2" << std::endl;
         ADD_TAB(os); ADD_STR3(os, d3d12_options2, DepthBoundsTestSupported, "        ");
         ADD_TAB(os); ADD_STR3(os, d3d12_options2, ProgrammableSamplePositionsTier, " ");
         
@@ -881,6 +1043,32 @@ public:
 
         return true;
     };
+    bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS7(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS7& d3d12_options7)
+    {
+        os << "D3D12_FEATURE_DATA_D3D12_OPTIONS7" << std::endl;
+        ADD_TAB(os); ADD_STR3(os, d3d12_options7, MeshShaderTier, "      ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options7, SamplerFeedbackTier, " ");
+
+        return true;
+    }
+    bool Trace_D3D12_FEATURE_DATA_PROTECTED_RESOURCE_SESSION_TYPE_COUNT(std::ostream& os, const D3D12_FEATURE_DATA_PROTECTED_RESOURCE_SESSION_TYPE_COUNT& protected_resource_session_type_count)
+    {
+        //protected_resource_session_type_count.
+        os << "D3D12_FEATURE_DATA_PROTECTED_RESOURCE_SESSION_TYPE_COUNT" << std::endl;
+        ADD_TAB(os); ADD_STR3(os, protected_resource_session_type_count, NodeIndex, " ");
+        ADD_TAB(os); ADD_STR3(os, protected_resource_session_type_count, Count, "     ");
+
+        return true;
+    }
+    bool Trace_D3D12_FEATURE_DATA_PROTECTED_RESOURCE_SESSION_TYPES(std::ostream& os, const D3D12_FEATURE_DATA_PROTECTED_RESOURCE_SESSION_TYPES& protected_resource_session_types, const std::vector<GUID>& session_types)
+    {
+        os << "D3D12_FEATURE_DATA_PROTECTED_RESOURCE_SESSION_TYPES" << std::endl;
+        ADD_TAB(os); ADD_STR3(os, protected_resource_session_types, Count, "     ");
+        size_t count = 0;
+        for (auto& i : session_types) { ADD_TAB(os);         os << "pTypes[" << count++ << "] = " << i << std::endl; }
+
+        return true;
+    }
 
 private:
     Ptr<IDXGIFactory2> factory;
@@ -889,11 +1077,84 @@ private:
 
 };
 
+void PrintHelp(const char *argv0) 
+{
+    std::cout << "\nD3D12FeatureViewer\n\n";
+
+    std::cout << "USAGE: " << argv0 << " [OPTIONS]\n\n";
+
+    std::cout << "OPTIONS:\n";
+    std::cout << "-h                        Print this help.\n\n";
+
+    std::cout << "--adapter <node index>    The adapter index to create the device. The default is 0.\n";
+    std::cout << "                          Corresponds to IDXGIFactory1::EnumAdapters1::Adapter.\n\n";
+
+    std::cout << "--node <adapter index>    The node index to get feature data. The default is 0.\n";
+    std::cout << "                          Corresponds to D3D12_FEATURE_DATA*::NodeIndex(if exists).\n\n";
+
+    std::cout << "--show-queue-priorities   Show all D3D12_FEATURE_DATA_COMMAND_QUEUE_PRIORITY specified for each command list type and each priority.\n\n";
+    std::cout << "--show-formats [msql]     Show the format features and multi-sample quality levels(msql) optionally.\n\n";
+}
+
 int main(int argc, const char* argv[])
 {
-    D3D12FeatureViewer viewer;
-    viewer.Init(0);
-    viewer.CheckFeatureSupport(std::cout);
-    
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+    {
+        UINT adapter                  = 0;
+        UINT node                     = 0;
+        bool is_show_formats          = false;
+        bool is_show_msql             = false;
+        bool is_show_queue_priorities = false;
+
+        auto Cmp = [](auto argname, auto arg) { return strncmp(argname, arg, strlen(arg)) == 0; };
+        for (int i = 0; i < argc; i++)
+        {
+            if (Cmp("-h", argv[i]))
+            {
+                PrintHelp(argv[0]);
+                return 0;
+            }
+            
+            else if (Cmp("--adapter", argv[i]))
+            {
+                if ((i + 1) < argc)
+                    adapter = (UINT)atoi(argv[++i]);
+            }
+
+            else if (Cmp("--node", argv[i]))
+            {
+                if ((i + 1) < argc)
+                    node = (UINT)atoi(argv[++i]);
+            }
+            
+            else if (Cmp("--show-queue-priorities", argv[i]))
+            {
+                is_show_queue_priorities = true;
+            }
+
+            else if (Cmp("--show-formats", argv[i]))
+            {
+                is_show_formats = true;
+                
+                if ((i + 1) < argc && Cmp("msql", argv[++i]))
+                    is_show_msql = true;
+            }
+        }
+
+        D3D12FeatureViewer viewer;
+        if (!viewer.Init(adapter))
+            return 1;
+
+        viewer.CheckFeatureSupport(std::cout, node);
+
+        if (is_show_queue_priorities)
+            viewer.CheckQueuePrioritySupports(std::cout);
+
+        if (is_show_formats)
+            viewer.CheckFormatSupports(std::cout, is_show_msql);
+
+    }
+    _CrtDumpMemoryLeaks();
+
     return 0;
 }
