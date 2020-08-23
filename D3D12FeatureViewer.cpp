@@ -517,13 +517,13 @@ int main(int argc, const char* argv[])
             else if (Cmp("--adapter", argv[i]))
             {
                 if ((i + 1) < argc)
-                    adapter = (UINT)atoi(argv[++i]);
+                    adapter = (UINT)atoi(argv[i + 1]);
             }
 
             else if (Cmp("--node", argv[i]))
             {
                 if ((i + 1) < argc)
-                    node = (UINT)atoi(argv[++i]);
+                    node = (UINT)atoi(argv[i + 1]);
             }
             
             else if (Cmp("--show-queue-priorities", argv[i]))
@@ -535,7 +535,7 @@ int main(int argc, const char* argv[])
             {
                 is_show_formats = true;
                 
-                if ((i + 1) < argc && Cmp("msql", argv[++i]))
+                if ((i + 1) < argc && Cmp("msql", argv[i + 1]))
                     is_show_msql = true;
             }
         }
