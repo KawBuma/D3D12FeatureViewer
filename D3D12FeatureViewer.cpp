@@ -608,13 +608,13 @@ void PrintHelp(const char *argv0)
     std::cout << "USAGE: " << argv0 << " [OPTIONS]\n\n";
 
     std::cout << "OPTIONS:\n";
-    std::cout << "-h                            Print this help.\n\n";
+    std::cout << "-h                            Print this help message.\n\n";
 
     std::cout << "--adapter <adapter index>     The adapter index to create the device. The default is 0.\n";
     std::cout << "                              Corresponds to IDXGIFactory1::EnumAdapters1::Adapter.\n\n";
 
     std::cout << "--node <node index>           The node index to get feature data. The default is 0.\n";
-    std::cout << "                              Corresponds to D3D12_FEATURE_DATA*::NodeIndex(if exists).\n\n";
+    std::cout << "                              Corresponds to D3D12_FEATURE_DATA*::NodeIndex (if exists).\n\n";
 
     std::cout << "--show-queue-priorities       Show all D3D12_FEATURE_DATA_COMMAND_QUEUE_PRIORITY specified for each command list type and each priority.\n\n";
     std::cout << "--show-formats [msql]         Show the format features and multi-sample quality levels(msql) optionally.\n\n";
