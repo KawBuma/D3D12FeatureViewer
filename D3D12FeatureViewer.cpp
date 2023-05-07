@@ -183,6 +183,20 @@ public:
         D3D12_FEATURE_DATA_PROTECTED_RESOURCE_SESSION_TYPES         protected_resource_session_types      {};
         std::vector<GUID>                                           session_types;
 
+        D3D12_FEATURE_DATA_DISPLAYABLE                              displayable                           {};
+        D3D12_FEATURE_DATA_D3D12_OPTIONS8                           d3d12_options8                        {};
+        D3D12_FEATURE_DATA_D3D12_OPTIONS9                           d3d12_options9                        {};
+        D3D12_FEATURE_DATA_D3D12_OPTIONS10                          d3d12_options10                       {};
+        D3D12_FEATURE_DATA_D3D12_OPTIONS11                          d3d12_options11                       {};
+        D3D12_FEATURE_DATA_D3D12_OPTIONS12                          d3d12_options12                       {};
+        D3D12_FEATURE_DATA_D3D12_OPTIONS13                          d3d12_options13                       {};
+        D3D12_FEATURE_DATA_D3D12_OPTIONS14                          d3d12_options14                       {};
+        D3D12_FEATURE_DATA_D3D12_OPTIONS15                          d3d12_options15                       {};
+        D3D12_FEATURE_DATA_D3D12_OPTIONS16                          d3d12_options16                       {};
+        D3D12_FEATURE_DATA_D3D12_OPTIONS17                          d3d12_options17                       {};
+        D3D12_FEATURE_DATA_D3D12_OPTIONS18                          d3d12_options18                       {};
+        D3D12_FEATURE_DATA_D3D12_OPTIONS19                          d3d12_options19                       {};
+
         D3D12_FEATURE f;
         auto CheckHR = [&](HRESULT hr) { if (FAILED(hr)) { os << "Failed to get " << f << '.' << std::endl; } };
         CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS                     ), &d3d12_options                     , sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS                     )));
@@ -205,11 +219,26 @@ public:
         CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS6                    ), &d3d12_options6                    , sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS6                    )));
         CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_QUERY_META_COMMAND                ), &query_meta_command                , sizeof(D3D12_FEATURE_DATA_QUERY_META_COMMAND                )));
 
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS7                    ), &d3d12_options7                    , sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS7                    )));
         CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_PROTECTED_RESOURCE_SESSION_TYPE_COUNT), &protected_resource_session_type_count, sizeof(D3D12_FEATURE_DATA_PROTECTED_RESOURCE_SESSION_TYPE_COUNT)));
         session_types.resize(protected_resource_session_type_count.Count);
         protected_resource_session_types.Count  = (UINT)session_types.size();
         protected_resource_session_types.pTypes = session_types.data();
         CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_PROTECTED_RESOURCE_SESSION_TYPES     ), &protected_resource_session_types     , sizeof(D3D12_FEATURE_DATA_PROTECTED_RESOURCE_SESSION_TYPES     )));
+
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_DISPLAYABLE    ), &displayable    , sizeof(D3D12_FEATURE_DATA_DISPLAYABLE    )));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS8 ), &d3d12_options8 , sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS8 )));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS9 ), &d3d12_options9 , sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS9 )));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS10), &d3d12_options10, sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS10)));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS11), &d3d12_options11, sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS11)));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS12), &d3d12_options12, sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS12)));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS13), &d3d12_options13, sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS13)));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS14), &d3d12_options14, sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS14)));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS15), &d3d12_options15, sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS15)));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS16), &d3d12_options16, sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS16)));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS17), &d3d12_options17, sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS17)));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS18), &d3d12_options18, sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS18)));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS19), &d3d12_options19, sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS19)));
 
         ADD_LINE(os);
         ADD_LINE(os);
@@ -222,12 +251,25 @@ public:
         Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS5                    (os, d3d12_options5);                     ADD_LINE(os);
         Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS6                    (os, d3d12_options6);                     ADD_LINE(os);
         Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS7                    (os, d3d12_options7);                     ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS8                    (os, d3d12_options8 );                    ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS9                    (os, d3d12_options9 );                    ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS10                   (os, d3d12_options10);                    ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS11                   (os, d3d12_options11);                    ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS12                   (os, d3d12_options12);                    ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS13                   (os, d3d12_options13);                    ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS14                   (os, d3d12_options14);                    ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS15                   (os, d3d12_options15);                    ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS16                   (os, d3d12_options16);                    ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS17                   (os, d3d12_options17);                    ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS18                   (os, d3d12_options18);                    ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS19                   (os, d3d12_options19);                    ADD_LINE(os);
         Trace_D3D12_FEATURE_DATA_ARCHITECTURE                      (os, architecture);                       ADD_LINE(os);
         Trace_D3D12_FEATURE_DATA_ARCHITECTURE1                     (os, architecture1);                      ADD_LINE(os);
         Trace_D3D12_FEATURE_DATA_FEATURE_LEVELS                    (os, feature_levels);                     ADD_LINE(os);
         Trace_D3D12_FEATURE_DATA_GPU_VIRTUAL_ADDRESS_SUPPORT       (os, gpu_virtual_address_support);        ADD_LINE(os);
         Trace_D3D12_FEATURE_DATA_SHADER_MODEL                      (os, shader_model);                       ADD_LINE(os);
         Trace_D3D12_FEATURE_DATA_PROTECTED_RESOURCE_SESSION_SUPPORT(os, protected_resource_session_support); ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_DISPLAYABLE                       (os, displayable);                        ADD_LINE(os);
         Trace_D3D12_FEATURE_DATA_ROOT_SIGNATURE                    (os, root_signature);                     ADD_LINE(os);
         Trace_D3D12_FEATURE_DATA_SHADER_CACHE                      (os, shader_cache);                       ADD_LINE(os);
         Trace_D3D12_FEATURE_DATA_EXISTING_HEAPS                    (os, existing_heaps);                     ADD_LINE(os);
@@ -471,6 +513,84 @@ public:
         size_t count = 0;
         for (auto& i : session_types) { ADD_TAB(os);         os << "pTypes[" << count++ << "] = " << i << std::endl; }
 
+        return true;
+    }
+    bool Trace_D3D12_FEATURE_DATA_DISPLAYABLE(std::ostream& os, const D3D12_FEATURE_DATA_DISPLAYABLE& displayable)
+    {
+        os << "D3D12_FEATURE_DATA_DISPLAYABLE" << std::endl;
+        // TODO: Trace_D3D12_FEATURE_DATA_DISPLAYABLE
+        return true;
+    }
+    bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS8(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS8& d3d12_options8)
+    {
+        os << "D3D12_FEATURE_DATA_D3D12_OPTIONS8" << std::endl;
+        // TODO: Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS8
+        return true;
+    }
+    bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS9(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS9& d3d12_options9)
+    {
+        os << "D3D12_FEATURE_DATA_D3D12_OPTIONS9" << std::endl;
+        // TODO: Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS9
+        return true;
+    }
+    bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS10(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS10& d3d12_options10)
+    {
+        os << "D3D12_FEATURE_DATA_D3D12_OPTIONS10" << std::endl;
+        // TODO: Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS10
+        return true;
+    }
+    bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS11(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS11& d3d12_options11)
+    {
+        os << "D3D12_FEATURE_DATA_D3D12_OPTIONS11" << std::endl;
+        // TODO: Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS11
+        return true;
+    }
+    bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS12(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS12& d3d12_options12)
+    {
+        os << "D3D12_FEATURE_DATA_D3D12_OPTIONS12" << std::endl;
+        // TODO: Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS12
+        return true;
+    }
+    bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS13(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS13& d3d12_options13)
+    {
+        os << "D3D12_FEATURE_DATA_D3D12_OPTIONS13" << std::endl;
+        // TODO: Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS13
+        return true;
+    }
+    bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS14(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS14& d3d12_options14)
+    {
+        os << "D3D12_FEATURE_DATA_D3D12_OPTIONS14" << std::endl;
+        // TODO: Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS14
+        return true;
+    }
+    bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS15(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS15& d3d12_options15)
+    {
+        os << "D3D12_FEATURE_DATA_D3D12_OPTIONS15" << std::endl;
+        // TODO: Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS15
+        return true;
+    }
+    bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS16(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS16& d3d12_options16)
+    {
+        os << "D3D12_FEATURE_DATA_D3D12_OPTIONS16" << std::endl;
+        // TODO: Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS16
+        return true;
+    }
+    bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS17(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS17& d3d12_options17)
+    {
+        os << "D3D12_FEATURE_DATA_D3D12_OPTIONS17" << std::endl;
+        // TODO: Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS17
+        return true;
+    }
+    bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS18(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS18& d3d12_options18)
+    {
+        os << "D3D12_FEATURE_DATA_D3D12_OPTIONS18" << std::endl;
+        // TODO: Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS18
+        return true;
+    }
+    bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS19(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS19& d3d12_options19)
+    {
+        os << "D3D12_FEATURE_DATA_D3D12_OPTIONS19" << std::endl;
+        // TODO: Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS19
         return true;
     }
 
