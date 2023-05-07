@@ -15,21 +15,21 @@
 #define ADD_IF3(dst, val, op ,ev, custom) if (val op ev) { AddBar(dst); dst += custom; }
 #define ADD_IF4(dst, val, op ,ev, custom, custom1) if (val op ev) { custom1 dst += custom; }
 #define ADD_STR(dst,s,x) dst << #x << " = " << s.x << std::endl
-#define ADD_STR2(dst,s,x) dst << #x << " = " << s.x 
+#define ADD_STR2(dst,s,x) dst << #x << " = " << s.x
 #define ADD_STR3(dst,s,x,space) dst << #x << space << "= " << s.x << std::endl
-#define ADD_STR4(dst,s,x,space) dst << #x << space << "= " << s.x 
+#define ADD_STR4(dst,s,x,space) dst << #x << space << "= " << s.x
 #define STR(x) #x
 #define ADD_LINE(x) x << std::endl
 #define ADD_TAB(x) x << "\t"
 
 inline void AddBar(std::string& x) { if (!x.empty()) x += " | "; }
 
-#define FW std::setfill('0') << std::setw(2) 
+#define FW std::setfill('0') << std::setw(2)
 
 inline std::string GetUUIDString(const uint8_t _uuid[16])
 {
     std::stringstream ss;
-    ss << std::hex 
+    ss << std::hex
         << FW << (uint32_t)_uuid[0]  << FW << (uint32_t)_uuid[1] << FW << (uint32_t)_uuid[2] << FW << (uint32_t)_uuid[3] << "-"
         << FW << (uint32_t)_uuid[4]  << FW << (uint32_t)_uuid[5] << "-"
         << FW << (uint32_t)_uuid[6]  << FW << (uint32_t)_uuid[7] << "-"
@@ -63,7 +63,7 @@ inline std::ostream& operator<< (std::ostream& os, D3D12_SHADER_MIN_PRECISION_SU
     return os << s;
 }
 inline std::ostream& operator<< (std::ostream& os, D3D12_TILED_RESOURCES_TIER val)
-{		
+{
     std::string s;
     switch (val)
     {
@@ -79,7 +79,7 @@ inline std::ostream& operator<< (std::ostream& os, D3D12_TILED_RESOURCES_TIER va
     return os << s;
 }
 inline std::ostream& operator<< (std::ostream& os, D3D12_RESOURCE_BINDING_TIER val)
-{		
+{
     std::string s;
     switch (val)
     {
@@ -93,7 +93,7 @@ inline std::ostream& operator<< (std::ostream& os, D3D12_RESOURCE_BINDING_TIER v
     return os << s;
 }
 inline std::ostream& operator<< (std::ostream& os, D3D12_CONSERVATIVE_RASTERIZATION_TIER val)
-{		
+{
     std::string s;
     switch (val)
     {
@@ -108,7 +108,7 @@ inline std::ostream& operator<< (std::ostream& os, D3D12_CONSERVATIVE_RASTERIZAT
     return os << s;
 }
 inline std::ostream& operator<< (std::ostream& os, D3D12_CROSS_NODE_SHARING_TIER val)
-{		
+{
     std::string s;
     switch (val)
     {
@@ -124,7 +124,7 @@ inline std::ostream& operator<< (std::ostream& os, D3D12_CROSS_NODE_SHARING_TIER
     return os << s;
 }
 inline std::ostream& operator<< (std::ostream& os, D3D12_RESOURCE_HEAP_TIER val)
-{		
+{
     std::string s;
     switch (val)
     {
@@ -587,11 +587,24 @@ inline std::ostream& operator<< (std::ostream& os, D3D12_FEATURE val)
         CASE_ADD(s, D3D12_FEATURE_SERIALIZATION);
         CASE_ADD(s, D3D12_FEATURE_CROSS_NODE);
         CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS5);
+        CASE_ADD(s, D3D12_FEATURE_DISPLAYABLE);
         CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS6);
         CASE_ADD(s, D3D12_FEATURE_QUERY_META_COMMAND);
         CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS7);
         CASE_ADD(s, D3D12_FEATURE_PROTECTED_RESOURCE_SESSION_TYPE_COUNT);
         CASE_ADD(s, D3D12_FEATURE_PROTECTED_RESOURCE_SESSION_TYPES);
+        CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS8);
+        CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS9);
+        CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS10);
+        CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS11);
+        CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS12);
+        CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS13);
+        CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS14);
+        CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS15);
+        CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS16);
+        CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS17);
+        CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS18);
+        CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS19);
     default:
         break;
     }
