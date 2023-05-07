@@ -7,6 +7,11 @@
 template<typename T>
 using Ptr = Microsoft::WRL::ComPtr<T>;
 
+/// @brief D3D12FeatureViewer 指定の D3D12 Agility SDK バージョン
+extern "C" __declspec(dllexport) const UINT D3D12SDKVersion = 610;
+
+/// @brief D3D12FeatureViewer 指定の D3D12 Agility SDK ライブラリへのパス
+extern "C" __declspec(dllexport) const char* D3D12SDKPath = ".\\D3D12\\";
 
 class D3D12FeatureViewer
 {
@@ -75,7 +80,7 @@ public:
         return true;
     }
 
-    bool CheckFormatSupports(std::ostream& os, bool is_show_msql) 
+    bool CheckFormatSupports(std::ostream& os, bool is_show_msql)
     {
         os << "D3D12_FEATURE_DATA_FORMAT_SUPPORT/D3D12_FEATURE_DATA_FORMAT_INFO: " << std::endl;
 
@@ -118,7 +123,7 @@ public:
         return true;
     }
 
-    bool CheckQueuePrioritySupports(std::ostream& os) 
+    bool CheckQueuePrioritySupports(std::ostream& os)
     {
         auto CheckHR = [&](HRESULT hr) { if (FAILED(hr)) { os << "Failed to get " << D3D12_FEATURE_COMMAND_QUEUE_PRIORITY << '.' << std::endl; } };
 
@@ -339,7 +344,7 @@ public:
         os << "D3D12_FEATURE_DATA_D3D12_OPTIONS2" << std::endl;
         ADD_TAB(os); ADD_STR3(os, d3d12_options2, DepthBoundsTestSupported, "        ");
         ADD_TAB(os); ADD_STR3(os, d3d12_options2, ProgrammableSamplePositionsTier, " ");
-        
+
         return true;
     };
     bool Trace_D3D12_FEATURE_DATA_SHADER_CACHE(std::ostream& os, const D3D12_FEATURE_DATA_SHADER_CACHE& shader_cache)
@@ -351,7 +356,7 @@ public:
     };
     bool Trace_D3D12_FEATURE_DATA_COMMAND_QUEUE_PRIORITY(std::ostream& os, const D3D12_FEATURE_DATA_COMMAND_QUEUE_PRIORITY& command_queue_priority)
     {
-        os << "D3D12_FEATURE_DATA_COMMAND_QUEUE_PRIORITY" << std::endl;        
+        os << "D3D12_FEATURE_DATA_COMMAND_QUEUE_PRIORITY" << std::endl;
         ADD_TAB(os); ADD_STR3(os,                               command_queue_priority, CommandListType, "            ");
         ADD_TAB(os); ADD_STR3(os, (D3D12_COMMAND_QUEUE_PRIORITY)command_queue_priority, Priority, "                   ");
         ADD_TAB(os); ADD_STR3(os,                               command_queue_priority, PriorityForTypeIsSupported, " ");
@@ -373,7 +378,7 @@ public:
     {
         os << "D3D12_FEATURE_DATA_EXISTING_HEAPS" << std::endl;
         ADD_TAB(os); ADD_STR(os, existing_heaps, Supported);
-        
+
         return true;
     };
     bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS4(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS4& d3d12_options4)
@@ -476,7 +481,7 @@ private:
 
 };
 
-void PrintHelp(const char *argv0) 
+void PrintHelp(const char *argv0)
 {
     std::cout << "\nD3D12FeatureViewer\n\n";
 
@@ -513,7 +518,7 @@ int main(int argc, const char* argv[])
                 PrintHelp(argv[0]);
                 return 0;
             }
-            
+
             else if (Cmp("--adapter", argv[i]))
             {
                 if ((i + 1) < argc)
@@ -525,7 +530,7 @@ int main(int argc, const char* argv[])
                 if ((i + 1) < argc)
                     node = (UINT)atoi(argv[i + 1]);
             }
-            
+
             else if (Cmp("--show-queue-priorities", argv[i]))
             {
                 is_show_queue_priorities = true;
@@ -534,7 +539,7 @@ int main(int argc, const char* argv[])
             else if (Cmp("--show-formats", argv[i]))
             {
                 is_show_formats = true;
-                
+
                 if ((i + 1) < argc && Cmp("msql", argv[i + 1]))
                     is_show_msql = true;
             }
