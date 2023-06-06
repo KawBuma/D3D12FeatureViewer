@@ -154,6 +154,7 @@ inline std::ostream& operator<< (std::ostream& os, D3D_FEATURE_LEVEL val)
     ADD_IF2(s, val, &, D3D_FEATURE_LEVEL_11_1);
     ADD_IF2(s, val, &, D3D_FEATURE_LEVEL_12_0);
     ADD_IF2(s, val, &, D3D_FEATURE_LEVEL_12_1);
+    ADD_IF2(s, val, &, D3D_FEATURE_LEVEL_12_2);
 
     return os << s;
 }
@@ -281,6 +282,8 @@ inline std::ostream& operator<< (std::ostream& os, DXGI_FORMAT val)
         CASE_ADD(s, DXGI_FORMAT_P208);
         CASE_ADD(s, DXGI_FORMAT_V208);
         CASE_ADD(s, DXGI_FORMAT_V408);
+        CASE_ADD(s, DXGI_FORMAT_SAMPLER_FEEDBACK_MIN_MIP_OPAQUE);
+        CASE_ADD(s, DXGI_FORMAT_SAMPLER_FEEDBACK_MIP_REGION_USED_OPAQUE);
         CASE_ADD(s, DXGI_FORMAT_FORCE_UINT);
     default:
         break;
@@ -306,6 +309,9 @@ inline std::ostream& operator<< (std::ostream& os, D3D_SHADER_MODEL val)
     ADD_IF2(s, val, &, D3D_SHADER_MODEL_6_3);
     ADD_IF2(s, val, &, D3D_SHADER_MODEL_6_4);
     ADD_IF2(s, val, &, D3D_SHADER_MODEL_6_5);
+    ADD_IF2(s, val, &, D3D_SHADER_MODEL_6_6);
+    ADD_IF2(s, val, &, D3D_SHADER_MODEL_6_7);
+    ADD_IF2(s, val, &, D3D_SHADER_MODEL_6_8);
 
     return os << s;
 }
@@ -315,6 +321,7 @@ inline std::ostream& operator<< (std::ostream& os, D3D_ROOT_SIGNATURE_VERSION va
     ADD_IF2(s, val, &, D3D_ROOT_SIGNATURE_VERSION_1);
     ADD_IF2(s, val, &, D3D_ROOT_SIGNATURE_VERSION_1_0);
     ADD_IF2(s, val, &, D3D_ROOT_SIGNATURE_VERSION_1_1);
+    ADD_IF2(s, val, &, D3D_ROOT_SIGNATURE_VERSION_1_2);
 
     return os << s;
 }
@@ -340,6 +347,9 @@ inline std::ostream& operator<< (std::ostream& os, D3D12_SHADER_CACHE_SUPPORT_FL
     ADD_IF2(s, val, &, D3D12_SHADER_CACHE_SUPPORT_LIBRARY);
     ADD_IF2(s, val, &, D3D12_SHADER_CACHE_SUPPORT_AUTOMATIC_INPROC_CACHE);
     ADD_IF2(s, val, &, D3D12_SHADER_CACHE_SUPPORT_AUTOMATIC_DISK_CACHE);
+    ADD_IF2(s, val, &, D3D12_SHADER_CACHE_SUPPORT_DRIVER_MANAGED_CACHE);
+    ADD_IF2(s, val, &, D3D12_SHADER_CACHE_SUPPORT_SHADER_CONTROL_CLEAR);
+    ADD_IF2(s, val, &, D3D12_SHADER_CACHE_SUPPORT_SHADER_SESSION_DELETE);
 
     return os << s;
 }
@@ -411,6 +421,7 @@ inline std::ostream& operator<< (std::ostream& os, D3D12_SHARED_RESOURCE_COMPATI
     {
         CASE_ADD(s, D3D12_SHARED_RESOURCE_COMPATIBILITY_TIER_0);
         CASE_ADD(s, D3D12_SHARED_RESOURCE_COMPATIBILITY_TIER_1);
+        CASE_ADD(s, D3D12_SHARED_RESOURCE_COMPATIBILITY_TIER_2);
     default:
         break;
     }
@@ -451,6 +462,7 @@ inline std::ostream& operator<< (std::ostream& os, D3D12_RAYTRACING_TIER val)
     {
         CASE_ADD(s, D3D12_RAYTRACING_TIER_NOT_SUPPORTED);
         CASE_ADD(s, D3D12_RAYTRACING_TIER_1_0);
+        CASE_ADD(s, D3D12_RAYTRACING_TIER_1_1);
     default:
         break;
     }
@@ -525,6 +537,7 @@ inline std::ostream& operator<< (std::ostream& os, D3D12_FORMAT_SUPPORT2 val)
     ADD_IF4(s, val, &, D3D12_FORMAT_SUPPORT2_OUTPUT_MERGER_LOGIC_OP                      , "OUTPUT_MERGER_LOGIC_OP"                      , Align(); );
     ADD_IF4(s, val, &, D3D12_FORMAT_SUPPORT2_TILED                                       , "TILED"                                       , Align(); );
     ADD_IF4(s, val, &, D3D12_FORMAT_SUPPORT2_MULTIPLANE_OVERLAY                          , "MULTIPLANE_OVERLAY"                          , Align(); );
+    ADD_IF4(s, val, &, D3D12_FORMAT_SUPPORT2_SAMPLER_FEEDBACK                            , "SAMPLER_FEEDBACK"                            , Align(); );
 
     return os << s;
 }
