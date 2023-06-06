@@ -553,7 +553,8 @@ public:
     bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS11(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS11& d3d12_options11)
     {
         os << "D3D12_FEATURE_DATA_D3D12_OPTIONS11" << std::endl;
-        // TODO: Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS11
+        ADD_TAB(os); ADD_STR(os, d3d12_options11, AtomicInt64OnDescriptorHeapResourceSupported);
+
         return true;
     }
     bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS12(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS12& d3d12_options12)
