@@ -545,7 +545,9 @@ public:
     bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS10(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS10& d3d12_options10)
     {
         os << "D3D12_FEATURE_DATA_D3D12_OPTIONS10" << std::endl;
-        // TODO: Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS10
+        ADD_TAB(os); ADD_STR3(os, d3d12_options10, VariableRateShadingSumCombinerSupported, "    ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options10, MeshShaderPerPrimitiveShadingRateSupported, " ");
+
         return true;
     }
     bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS11(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS11& d3d12_options11)
