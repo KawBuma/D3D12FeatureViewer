@@ -621,7 +621,17 @@ public:
     bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS19(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS19& d3d12_options19)
     {
         os << "D3D12_FEATURE_DATA_D3D12_OPTIONS19" << std::endl;
-        // TODO: Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS19
+        ADD_TAB(os); ADD_STR3(os, d3d12_options19, MismatchingOutputDimensionsSupported, "           ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options19, SupportedSampleCountsWithNoOutputs, "             ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options19, PointSamplingAddressesNeverRoundUp, "             ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options19, RasterizerDesc2Supported, "                       ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options19, NarrowQuadrilateralLinesSupported, "              ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options19, AnisoFilterWithPointMipSupported, "               ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options19, MaxSamplerDescriptorHeapSize, "                   ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options19, MaxSamplerDescriptorHeapSizeWithStaticSamplers, " ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options19, MaxViewDescriptorHeapSize, "                      ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options19, ComputeOnlyCustomHeapSupported, "                 ");
+
         return true;
     }
 
