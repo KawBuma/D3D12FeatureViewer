@@ -1,4 +1,4 @@
-﻿#include "Utils.h"
+#include "Utils.h"
 
 #pragma comment(lib, "d3d12.lib")
 #pragma comment(lib, "dxgi.lib")
@@ -156,16 +156,16 @@ public:
                                                      , D3D_FEATURE_LEVEL_9_1  , D3D_FEATURE_LEVEL_9_2 , D3D_FEATURE_LEVEL_9_3
                                                      , D3D_FEATURE_LEVEL_10_0 , D3D_FEATURE_LEVEL_10_1
                                                      , D3D_FEATURE_LEVEL_11_0 , D3D_FEATURE_LEVEL_11_1
-                                                     , D3D_FEATURE_LEVEL_12_0 , D3D_FEATURE_LEVEL_12_1
+                                                     , D3D_FEATURE_LEVEL_12_0 , D3D_FEATURE_LEVEL_12_1, D3D_FEATURE_LEVEL_12_2
         };
         D3D12_FEATURE_DATA_D3D12_OPTIONS                            d3d12_options                         {};
         D3D12_FEATURE_DATA_ARCHITECTURE                             architecture                          { node_index };
         D3D12_FEATURE_DATA_FEATURE_LEVELS                           feature_levels                        { _countof(feature_level_requests),feature_level_requests };
         D3D12_FEATURE_DATA_GPU_VIRTUAL_ADDRESS_SUPPORT              gpu_virtual_address_support           {};
-        D3D12_FEATURE_DATA_SHADER_MODEL                             shader_model                          { D3D_SHADER_MODEL_6_5 };
+        D3D12_FEATURE_DATA_SHADER_MODEL                             shader_model                          { D3D_HIGHEST_SHADER_MODEL };
         D3D12_FEATURE_DATA_D3D12_OPTIONS1                           d3d12_options1                        {};
         D3D12_FEATURE_DATA_PROTECTED_RESOURCE_SESSION_SUPPORT       protected_resource_session_support    { node_index };
-        D3D12_FEATURE_DATA_ROOT_SIGNATURE                           root_signature                        { D3D_ROOT_SIGNATURE_VERSION_1_1 };
+        D3D12_FEATURE_DATA_ROOT_SIGNATURE                           root_signature                        { D3D_ROOT_SIGNATURE_VERSION_1_2 };
         D3D12_FEATURE_DATA_ARCHITECTURE1                            architecture1                         { node_index };
         D3D12_FEATURE_DATA_D3D12_OPTIONS2                           d3d12_options2                        {};
         D3D12_FEATURE_DATA_SHADER_CACHE                             shader_cache                          {};
