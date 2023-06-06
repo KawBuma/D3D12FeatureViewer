@@ -90,9 +90,14 @@ public:
         D3D12_FEATURE_DATA_FORMAT_SUPPORT format_support{};
         D3D12_FEATURE_DATA_FORMAT_INFO    format_info{};
         D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS multisample_quality_levels{};
-        for (int i = 1; i < (int)DXGI_FORMAT_B4G4R4A4_UNORM + 1; i++)
+        constexpr int FORMAT_COUNT = (int)DXGI_FORMAT_SAMPLER_FEEDBACK_MIP_REGION_USED_OPAQUE + 1;
+        for (int i = 1; i < FORMAT_COUNT; i++)
         {
-            os << (format_support.Format = format_info.Format = (DXGI_FORMAT)i) << std::endl;
+            auto format = (DXGI_FORMAT)i;
+            if (!IsKnownFromat(format))
+                continue;
+
+            os << (format_support.Format = format_info.Format = format) << std::endl;
             os << "--------------------------------------------------------------------------------------------------" << std::endl;
             CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_FORMAT_SUPPORT), &format_support, sizeof(D3D12_FEATURE_DATA_FORMAT_SUPPORT)));
             CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_FORMAT_INFO)   , &format_info   , sizeof(D3D12_FEATURE_DATA_FORMAT_INFO)));
