@@ -518,7 +518,9 @@ public:
     bool Trace_D3D12_FEATURE_DATA_DISPLAYABLE(std::ostream& os, const D3D12_FEATURE_DATA_DISPLAYABLE& displayable)
     {
         os << "D3D12_FEATURE_DATA_DISPLAYABLE" << std::endl;
-        // TODO: Trace_D3D12_FEATURE_DATA_DISPLAYABLE
+        ADD_TAB(os); ADD_STR3(os, displayable, DisplayableTexture, "              ");
+        ADD_TAB(os); ADD_STR3(os, displayable, SharedResourceCompatibilityTier, " ");
+
         return true;
     }
     bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS8(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS8& d3d12_options8)
