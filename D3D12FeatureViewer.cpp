@@ -581,7 +581,10 @@ public:
     bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS14(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS14& d3d12_options14)
     {
         os << "D3D12_FEATURE_DATA_D3D12_OPTIONS14" << std::endl;
-        // TODO: Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS14
+        ADD_TAB(os); ADD_STR3(os, d3d12_options14, AdvancedTextureOpsSupported, "                    ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options14, WriteableMSAATexturesSupported, "                 ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options14, IndependentFrontAndBackStencilRefMaskSupported, " ");
+
         return true;
     }
     bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS15(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS15& d3d12_options15)
