@@ -30,6 +30,8 @@ public:
 
     bool Init(UINT adapter_index)
     {
+        std::cout << "D3D12FeatureViewer" << std::endl;
+
         {
             Ptr<ID3D12Debug> debug_controller;
             if (FAILED(D3D12GetDebugInterface(IID_PPV_ARGS(&debug_controller))))
@@ -69,12 +71,18 @@ public:
         std::cout   << "\tAdapterLuid           = " << GetLUIDString(reinterpret_cast<const uint8_t*>(&desc.AdapterLuid.LowPart))   << std::endl;
         std::cout   << "\tFlags                 = " << std::hex << desc.Flags << std::dec                                           << std::endl;
         std::cout << std::endl;
-        std::cout << std::endl;
 
         if (FAILED(D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_11_1, IID_PPV_ARGS(&device))))
         {
             std::cout << "Failed to create device." << std::endl;
             return false;
+        }
+
+        Microsoft::WRL::ComPtr<ID3D12DeviceConfiguration> device_config;
+        if (SUCCEEDED(device.As(&device_config)))
+        {
+            auto config_desc = device_config->GetDesc();
+            std::cout << "Agility SDK Version: " << config_desc.SDKVersion << std::endl;
         }
 
         return true;
@@ -90,9 +98,14 @@ public:
         D3D12_FEATURE_DATA_FORMAT_SUPPORT format_support{};
         D3D12_FEATURE_DATA_FORMAT_INFO    format_info{};
         D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS multisample_quality_levels{};
-        for (int i = 1; i < (int)DXGI_FORMAT_B4G4R4A4_UNORM + 1; i++)
+        constexpr int FORMAT_COUNT = (int)DXGI_FORMAT_SAMPLER_FEEDBACK_MIP_REGION_USED_OPAQUE + 1;
+        for (int i = 1; i < FORMAT_COUNT; i++)
         {
-            os << (format_support.Format = format_info.Format = (DXGI_FORMAT)i) << std::endl;
+            auto format = (DXGI_FORMAT)i;
+            if (!IsKnownFromat(format))
+                continue;
+
+            os << (format_support.Format = format_info.Format = format) << std::endl;
             os << "--------------------------------------------------------------------------------------------------" << std::endl;
             CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_FORMAT_SUPPORT), &format_support, sizeof(D3D12_FEATURE_DATA_FORMAT_SUPPORT)));
             CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_FORMAT_INFO)   , &format_info   , sizeof(D3D12_FEATURE_DATA_FORMAT_INFO)));
@@ -156,16 +169,16 @@ public:
                                                      , D3D_FEATURE_LEVEL_9_1  , D3D_FEATURE_LEVEL_9_2 , D3D_FEATURE_LEVEL_9_3
                                                      , D3D_FEATURE_LEVEL_10_0 , D3D_FEATURE_LEVEL_10_1
                                                      , D3D_FEATURE_LEVEL_11_0 , D3D_FEATURE_LEVEL_11_1
-                                                     , D3D_FEATURE_LEVEL_12_0 , D3D_FEATURE_LEVEL_12_1
+                                                     , D3D_FEATURE_LEVEL_12_0 , D3D_FEATURE_LEVEL_12_1, D3D_FEATURE_LEVEL_12_2
         };
         D3D12_FEATURE_DATA_D3D12_OPTIONS                            d3d12_options                         {};
         D3D12_FEATURE_DATA_ARCHITECTURE                             architecture                          { node_index };
         D3D12_FEATURE_DATA_FEATURE_LEVELS                           feature_levels                        { _countof(feature_level_requests),feature_level_requests };
         D3D12_FEATURE_DATA_GPU_VIRTUAL_ADDRESS_SUPPORT              gpu_virtual_address_support           {};
-        D3D12_FEATURE_DATA_SHADER_MODEL                             shader_model                          { D3D_SHADER_MODEL_6_5 };
+        D3D12_FEATURE_DATA_SHADER_MODEL                             shader_model                          { D3D_HIGHEST_SHADER_MODEL };
         D3D12_FEATURE_DATA_D3D12_OPTIONS1                           d3d12_options1                        {};
         D3D12_FEATURE_DATA_PROTECTED_RESOURCE_SESSION_SUPPORT       protected_resource_session_support    { node_index };
-        D3D12_FEATURE_DATA_ROOT_SIGNATURE                           root_signature                        { D3D_ROOT_SIGNATURE_VERSION_1_1 };
+        D3D12_FEATURE_DATA_ROOT_SIGNATURE                           root_signature                        { D3D_ROOT_SIGNATURE_VERSION_1_2 };
         D3D12_FEATURE_DATA_ARCHITECTURE1                            architecture1                         { node_index };
         D3D12_FEATURE_DATA_D3D12_OPTIONS2                           d3d12_options2                        {};
         D3D12_FEATURE_DATA_SHADER_CACHE                             shader_cache                          {};
@@ -182,6 +195,20 @@ public:
         D3D12_FEATURE_DATA_PROTECTED_RESOURCE_SESSION_TYPE_COUNT    protected_resource_session_type_count { node_index };
         D3D12_FEATURE_DATA_PROTECTED_RESOURCE_SESSION_TYPES         protected_resource_session_types      {};
         std::vector<GUID>                                           session_types;
+
+        D3D12_FEATURE_DATA_DISPLAYABLE                              displayable                           {};
+        D3D12_FEATURE_DATA_D3D12_OPTIONS8                           d3d12_options8                        {};
+        D3D12_FEATURE_DATA_D3D12_OPTIONS9                           d3d12_options9                        {};
+        D3D12_FEATURE_DATA_D3D12_OPTIONS10                          d3d12_options10                       {};
+        D3D12_FEATURE_DATA_D3D12_OPTIONS11                          d3d12_options11                       {};
+        D3D12_FEATURE_DATA_D3D12_OPTIONS12                          d3d12_options12                       {};
+        D3D12_FEATURE_DATA_D3D12_OPTIONS13                          d3d12_options13                       {};
+        D3D12_FEATURE_DATA_D3D12_OPTIONS14                          d3d12_options14                       {};
+        D3D12_FEATURE_DATA_D3D12_OPTIONS15                          d3d12_options15                       {};
+        D3D12_FEATURE_DATA_D3D12_OPTIONS16                          d3d12_options16                       {};
+        D3D12_FEATURE_DATA_D3D12_OPTIONS17                          d3d12_options17                       {};
+        D3D12_FEATURE_DATA_D3D12_OPTIONS18                          d3d12_options18                       {};
+        D3D12_FEATURE_DATA_D3D12_OPTIONS19                          d3d12_options19                       {};
 
         D3D12_FEATURE f;
         auto CheckHR = [&](HRESULT hr) { if (FAILED(hr)) { os << "Failed to get " << f << '.' << std::endl; } };
@@ -205,11 +232,26 @@ public:
         CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS6                    ), &d3d12_options6                    , sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS6                    )));
         CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_QUERY_META_COMMAND                ), &query_meta_command                , sizeof(D3D12_FEATURE_DATA_QUERY_META_COMMAND                )));
 
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS7                    ), &d3d12_options7                    , sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS7                    )));
         CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_PROTECTED_RESOURCE_SESSION_TYPE_COUNT), &protected_resource_session_type_count, sizeof(D3D12_FEATURE_DATA_PROTECTED_RESOURCE_SESSION_TYPE_COUNT)));
         session_types.resize(protected_resource_session_type_count.Count);
         protected_resource_session_types.Count  = (UINT)session_types.size();
         protected_resource_session_types.pTypes = session_types.data();
         CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_PROTECTED_RESOURCE_SESSION_TYPES     ), &protected_resource_session_types     , sizeof(D3D12_FEATURE_DATA_PROTECTED_RESOURCE_SESSION_TYPES     )));
+
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_DISPLAYABLE    ), &displayable    , sizeof(D3D12_FEATURE_DATA_DISPLAYABLE    )));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS8 ), &d3d12_options8 , sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS8 )));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS9 ), &d3d12_options9 , sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS9 )));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS10), &d3d12_options10, sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS10)));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS11), &d3d12_options11, sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS11)));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS12), &d3d12_options12, sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS12)));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS13), &d3d12_options13, sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS13)));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS14), &d3d12_options14, sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS14)));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS15), &d3d12_options15, sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS15)));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS16), &d3d12_options16, sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS16)));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS17), &d3d12_options17, sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS17)));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS18), &d3d12_options18, sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS18)));
+        CheckHR(device->CheckFeatureSupport((f = D3D12_FEATURE_D3D12_OPTIONS19), &d3d12_options19, sizeof(D3D12_FEATURE_DATA_D3D12_OPTIONS19)));
 
         ADD_LINE(os);
         ADD_LINE(os);
@@ -222,12 +264,25 @@ public:
         Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS5                    (os, d3d12_options5);                     ADD_LINE(os);
         Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS6                    (os, d3d12_options6);                     ADD_LINE(os);
         Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS7                    (os, d3d12_options7);                     ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS8                    (os, d3d12_options8 );                    ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS9                    (os, d3d12_options9 );                    ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS10                   (os, d3d12_options10);                    ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS11                   (os, d3d12_options11);                    ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS12                   (os, d3d12_options12);                    ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS13                   (os, d3d12_options13);                    ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS14                   (os, d3d12_options14);                    ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS15                   (os, d3d12_options15);                    ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS16                   (os, d3d12_options16);                    ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS17                   (os, d3d12_options17);                    ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS18                   (os, d3d12_options18);                    ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS19                   (os, d3d12_options19);                    ADD_LINE(os);
         Trace_D3D12_FEATURE_DATA_ARCHITECTURE                      (os, architecture);                       ADD_LINE(os);
         Trace_D3D12_FEATURE_DATA_ARCHITECTURE1                     (os, architecture1);                      ADD_LINE(os);
         Trace_D3D12_FEATURE_DATA_FEATURE_LEVELS                    (os, feature_levels);                     ADD_LINE(os);
         Trace_D3D12_FEATURE_DATA_GPU_VIRTUAL_ADDRESS_SUPPORT       (os, gpu_virtual_address_support);        ADD_LINE(os);
         Trace_D3D12_FEATURE_DATA_SHADER_MODEL                      (os, shader_model);                       ADD_LINE(os);
         Trace_D3D12_FEATURE_DATA_PROTECTED_RESOURCE_SESSION_SUPPORT(os, protected_resource_session_support); ADD_LINE(os);
+        Trace_D3D12_FEATURE_DATA_DISPLAYABLE                       (os, displayable);                        ADD_LINE(os);
         Trace_D3D12_FEATURE_DATA_ROOT_SIGNATURE                    (os, root_signature);                     ADD_LINE(os);
         Trace_D3D12_FEATURE_DATA_SHADER_CACHE                      (os, shader_cache);                       ADD_LINE(os);
         Trace_D3D12_FEATURE_DATA_EXISTING_HEAPS                    (os, existing_heaps);                     ADD_LINE(os);
@@ -473,6 +528,125 @@ public:
 
         return true;
     }
+    bool Trace_D3D12_FEATURE_DATA_DISPLAYABLE(std::ostream& os, const D3D12_FEATURE_DATA_DISPLAYABLE& displayable)
+    {
+        os << "D3D12_FEATURE_DATA_DISPLAYABLE" << std::endl;
+        ADD_TAB(os); ADD_STR3(os, displayable, DisplayableTexture, "              ");
+        ADD_TAB(os); ADD_STR3(os, displayable, SharedResourceCompatibilityTier, " ");
+
+        return true;
+    }
+    bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS8(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS8& d3d12_options8)
+    {
+        os << "D3D12_FEATURE_DATA_D3D12_OPTIONS8" << std::endl;
+        ADD_TAB(os); ADD_STR(os, d3d12_options8, UnalignedBlockTexturesSupported);
+
+        return true;
+    }
+    bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS9(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS9& d3d12_options9)
+    {
+        os << "D3D12_FEATURE_DATA_D3D12_OPTIONS9" << std::endl;
+        ADD_TAB(os); ADD_STR3(os, d3d12_options9, MeshShaderPipelineStatsSupported, "                  ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options9, MeshShaderSupportsFullRangeRenderTargetArrayIndex, " ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options9, AtomicInt64OnTypedResourceSupported, "               ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options9, AtomicInt64OnGroupSharedSupported, "                 ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options9, DerivativesInMeshAndAmplificationShadersSupported, " ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options9, WaveMMATier, "                                       ");
+
+        return true;
+    }
+    bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS10(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS10& d3d12_options10)
+    {
+        os << "D3D12_FEATURE_DATA_D3D12_OPTIONS10" << std::endl;
+        ADD_TAB(os); ADD_STR3(os, d3d12_options10, VariableRateShadingSumCombinerSupported, "    ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options10, MeshShaderPerPrimitiveShadingRateSupported, " ");
+
+        return true;
+    }
+    bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS11(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS11& d3d12_options11)
+    {
+        os << "D3D12_FEATURE_DATA_D3D12_OPTIONS11" << std::endl;
+        ADD_TAB(os); ADD_STR(os, d3d12_options11, AtomicInt64OnDescriptorHeapResourceSupported);
+
+        return true;
+    }
+    bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS12(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS12& d3d12_options12)
+    {
+        os << "D3D12_FEATURE_DATA_D3D12_OPTIONS12" << std::endl;
+        ADD_TAB(os); ADD_STR3(os, d3d12_options12, MSPrimitivesPipelineStatisticIncludesCulledPrimitives, " ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options12, EnhancedBarriersSupported, "                             ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options12, RelaxedFormatCastingSupported, "                         ");
+
+        return true;
+    }
+    bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS13(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS13& d3d12_options13)
+    {
+        os << "D3D12_FEATURE_DATA_D3D12_OPTIONS13" << std::endl;
+        ADD_TAB(os); ADD_STR3(os, d3d12_options13, UnrestrictedBufferTextureCopyPitchSupported, " ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options13, UnrestrictedVertexElementAlignmentSupported, " ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options13, InvertedViewportHeightFlipsYSupported, "       ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options13, InvertedViewportDepthFlipsZSupported, "        ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options13, TextureCopyBetweenDimensionsSupported, "       ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options13, AlphaBlendFactorSupported, "                   ");
+
+        return true;
+    }
+    bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS14(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS14& d3d12_options14)
+    {
+        os << "D3D12_FEATURE_DATA_D3D12_OPTIONS14" << std::endl;
+        ADD_TAB(os); ADD_STR3(os, d3d12_options14, AdvancedTextureOpsSupported, "                    ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options14, WriteableMSAATexturesSupported, "                 ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options14, IndependentFrontAndBackStencilRefMaskSupported, " ");
+
+        return true;
+    }
+    bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS15(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS15& d3d12_options15)
+    {
+        os << "D3D12_FEATURE_DATA_D3D12_OPTIONS15" << std::endl;
+        ADD_TAB(os); ADD_STR3(os, d3d12_options15, TriangleFanSupported, "                ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options15, DynamicIndexBufferStripCutSupported, " ");
+
+        return true;
+    }
+    bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS16(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS16& d3d12_options16)
+    {
+        os << "D3D12_FEATURE_DATA_D3D12_OPTIONS16" << std::endl;
+        ADD_TAB(os); ADD_STR3(os, d3d12_options16, DynamicDepthBiasSupported, " ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options16, GPUUploadHeapSupported, "    ");
+
+        return true;
+    }
+    bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS17(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS17& d3d12_options17)
+    {
+        os << "D3D12_FEATURE_DATA_D3D12_OPTIONS17" << std::endl;
+        ADD_TAB(os); ADD_STR3(os, d3d12_options17, NonNormalizedCoordinateSamplersSupported, " ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options17, ManualWriteTrackingResourceSupported, "     ");
+
+        return true;
+    }
+    bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS18(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS18& d3d12_options18)
+    {
+        os << "D3D12_FEATURE_DATA_D3D12_OPTIONS18" << std::endl;
+        ADD_TAB(os); ADD_STR(os, d3d12_options18, RenderPassesValid);
+
+        return true;
+    }
+    bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS19(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS19& d3d12_options19)
+    {
+        os << "D3D12_FEATURE_DATA_D3D12_OPTIONS19" << std::endl;
+        ADD_TAB(os); ADD_STR3(os, d3d12_options19, MismatchingOutputDimensionsSupported, "           ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options19, SupportedSampleCountsWithNoOutputs, "             ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options19, PointSamplingAddressesNeverRoundUp, "             ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options19, RasterizerDesc2Supported, "                       ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options19, NarrowQuadrilateralLinesSupported, "              ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options19, AnisoFilterWithPointMipSupported, "               ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options19, MaxSamplerDescriptorHeapSize, "                   ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options19, MaxSamplerDescriptorHeapSizeWithStaticSamplers, " ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options19, MaxViewDescriptorHeapSize, "                      ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options19, ComputeOnlyCustomHeapSupported, "                 ");
+
+        return true;
+    }
 
 private:
     Ptr<IDXGIFactory2> factory;
@@ -488,13 +662,13 @@ void PrintHelp(const char *argv0)
     std::cout << "USAGE: " << argv0 << " [OPTIONS]\n\n";
 
     std::cout << "OPTIONS:\n";
-    std::cout << "-h                            Print this help.\n\n";
+    std::cout << "-h                            Print this help message.\n\n";
 
     std::cout << "--adapter <adapter index>     The adapter index to create the device. The default is 0.\n";
     std::cout << "                              Corresponds to IDXGIFactory1::EnumAdapters1::Adapter.\n\n";
 
     std::cout << "--node <node index>           The node index to get feature data. The default is 0.\n";
-    std::cout << "                              Corresponds to D3D12_FEATURE_DATA*::NodeIndex(if exists).\n\n";
+    std::cout << "                              Corresponds to D3D12_FEATURE_DATA*::NodeIndex (if exists).\n\n";
 
     std::cout << "--show-queue-priorities       Show all D3D12_FEATURE_DATA_COMMAND_QUEUE_PRIORITY specified for each command list type and each priority.\n\n";
     std::cout << "--show-formats [msql]         Show the format features and multi-sample quality levels(msql) optionally.\n\n";

@@ -11,25 +11,27 @@
 
 #define CASE_ADD(dst, ev) case ev : dst += #ev; break
 #define CASE_ADD2(dst, ev, custom) case ev : dst += custom; break
+#define CASE_ADD3(dst, ev) case ev : dst << #ev; break
+#define CASE_ADD4(dst, ev, custom) case ev : dst << custom; break
 #define ADD_IF2(dst, val, op ,ev) if (val op ev) { AddBar(dst); dst += #ev; }
 #define ADD_IF3(dst, val, op ,ev, custom) if (val op ev) { AddBar(dst); dst += custom; }
 #define ADD_IF4(dst, val, op ,ev, custom, custom1) if (val op ev) { custom1 dst += custom; }
 #define ADD_STR(dst,s,x) dst << #x << " = " << s.x << std::endl
-#define ADD_STR2(dst,s,x) dst << #x << " = " << s.x 
+#define ADD_STR2(dst,s,x) dst << #x << " = " << s.x
 #define ADD_STR3(dst,s,x,space) dst << #x << space << "= " << s.x << std::endl
-#define ADD_STR4(dst,s,x,space) dst << #x << space << "= " << s.x 
+#define ADD_STR4(dst,s,x,space) dst << #x << space << "= " << s.x
 #define STR(x) #x
 #define ADD_LINE(x) x << std::endl
 #define ADD_TAB(x) x << "\t"
 
 inline void AddBar(std::string& x) { if (!x.empty()) x += " | "; }
 
-#define FW std::setfill('0') << std::setw(2) 
+#define FW std::setfill('0') << std::setw(2)
 
 inline std::string GetUUIDString(const uint8_t _uuid[16])
 {
     std::stringstream ss;
-    ss << std::hex 
+    ss << std::hex
         << FW << (uint32_t)_uuid[0]  << FW << (uint32_t)_uuid[1] << FW << (uint32_t)_uuid[2] << FW << (uint32_t)_uuid[3] << "-"
         << FW << (uint32_t)_uuid[4]  << FW << (uint32_t)_uuid[5] << "-"
         << FW << (uint32_t)_uuid[6]  << FW << (uint32_t)_uuid[7] << "-"
@@ -51,6 +53,139 @@ inline std::string GetLUIDString(const uint8_t _luid[8])
 
 #undef FW
 
+inline constexpr bool IsKnownFromat(DXGI_FORMAT format)
+{
+    switch (format)
+    {
+    case DXGI_FORMAT_R32G32B32A32_TYPELESS:
+    case DXGI_FORMAT_R32G32B32A32_FLOAT:
+    case DXGI_FORMAT_R32G32B32A32_UINT:
+    case DXGI_FORMAT_R32G32B32A32_SINT:
+    case DXGI_FORMAT_R32G32B32_TYPELESS:
+    case DXGI_FORMAT_R32G32B32_FLOAT:
+    case DXGI_FORMAT_R32G32B32_UINT:
+    case DXGI_FORMAT_R32G32B32_SINT:
+    case DXGI_FORMAT_R16G16B16A16_TYPELESS:
+    case DXGI_FORMAT_R16G16B16A16_FLOAT:
+    case DXGI_FORMAT_R16G16B16A16_UNORM:
+    case DXGI_FORMAT_R16G16B16A16_UINT:
+    case DXGI_FORMAT_R16G16B16A16_SNORM:
+    case DXGI_FORMAT_R16G16B16A16_SINT:
+    case DXGI_FORMAT_R32G32_TYPELESS:
+    case DXGI_FORMAT_R32G32_FLOAT:
+    case DXGI_FORMAT_R32G32_UINT:
+    case DXGI_FORMAT_R32G32_SINT:
+    case DXGI_FORMAT_R32G8X24_TYPELESS:
+    case DXGI_FORMAT_D32_FLOAT_S8X24_UINT:
+    case DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS:
+    case DXGI_FORMAT_X32_TYPELESS_G8X24_UINT:
+    case DXGI_FORMAT_R10G10B10A2_TYPELESS:
+    case DXGI_FORMAT_R10G10B10A2_UNORM:
+    case DXGI_FORMAT_R10G10B10A2_UINT:
+    case DXGI_FORMAT_R11G11B10_FLOAT:
+    case DXGI_FORMAT_R8G8B8A8_TYPELESS:
+    case DXGI_FORMAT_R8G8B8A8_UNORM:
+    case DXGI_FORMAT_R8G8B8A8_UNORM_SRGB:
+    case DXGI_FORMAT_R8G8B8A8_UINT:
+    case DXGI_FORMAT_R8G8B8A8_SNORM:
+    case DXGI_FORMAT_R8G8B8A8_SINT:
+    case DXGI_FORMAT_R16G16_TYPELESS:
+    case DXGI_FORMAT_R16G16_FLOAT:
+    case DXGI_FORMAT_R16G16_UNORM:
+    case DXGI_FORMAT_R16G16_UINT:
+    case DXGI_FORMAT_R16G16_SNORM:
+    case DXGI_FORMAT_R16G16_SINT:
+    case DXGI_FORMAT_R32_TYPELESS:
+    case DXGI_FORMAT_D32_FLOAT:
+    case DXGI_FORMAT_R32_FLOAT:
+    case DXGI_FORMAT_R32_UINT:
+    case DXGI_FORMAT_R32_SINT:
+    case DXGI_FORMAT_R24G8_TYPELESS:
+    case DXGI_FORMAT_D24_UNORM_S8_UINT:
+    case DXGI_FORMAT_R24_UNORM_X8_TYPELESS:
+    case DXGI_FORMAT_X24_TYPELESS_G8_UINT:
+    case DXGI_FORMAT_R8G8_TYPELESS:
+    case DXGI_FORMAT_R8G8_UNORM:
+    case DXGI_FORMAT_R8G8_UINT:
+    case DXGI_FORMAT_R8G8_SNORM:
+    case DXGI_FORMAT_R8G8_SINT:
+    case DXGI_FORMAT_R16_TYPELESS:
+    case DXGI_FORMAT_R16_FLOAT:
+    case DXGI_FORMAT_D16_UNORM:
+    case DXGI_FORMAT_R16_UNORM:
+    case DXGI_FORMAT_R16_UINT:
+    case DXGI_FORMAT_R16_SNORM:
+    case DXGI_FORMAT_R16_SINT:
+    case DXGI_FORMAT_R8_TYPELESS:
+    case DXGI_FORMAT_R8_UNORM:
+    case DXGI_FORMAT_R8_UINT:
+    case DXGI_FORMAT_R8_SNORM:
+    case DXGI_FORMAT_R8_SINT:
+    case DXGI_FORMAT_A8_UNORM:
+    case DXGI_FORMAT_R1_UNORM:
+    case DXGI_FORMAT_R9G9B9E5_SHAREDEXP:
+    case DXGI_FORMAT_R8G8_B8G8_UNORM:
+    case DXGI_FORMAT_G8R8_G8B8_UNORM:
+    case DXGI_FORMAT_BC1_TYPELESS:
+    case DXGI_FORMAT_BC1_UNORM:
+    case DXGI_FORMAT_BC1_UNORM_SRGB:
+    case DXGI_FORMAT_BC2_TYPELESS:
+    case DXGI_FORMAT_BC2_UNORM:
+    case DXGI_FORMAT_BC2_UNORM_SRGB:
+    case DXGI_FORMAT_BC3_TYPELESS:
+    case DXGI_FORMAT_BC3_UNORM:
+    case DXGI_FORMAT_BC3_UNORM_SRGB:
+    case DXGI_FORMAT_BC4_TYPELESS:
+    case DXGI_FORMAT_BC4_UNORM:
+    case DXGI_FORMAT_BC4_SNORM:
+    case DXGI_FORMAT_BC5_TYPELESS:
+    case DXGI_FORMAT_BC5_UNORM:
+    case DXGI_FORMAT_BC5_SNORM:
+    case DXGI_FORMAT_B5G6R5_UNORM:
+    case DXGI_FORMAT_B5G5R5A1_UNORM:
+    case DXGI_FORMAT_B8G8R8A8_UNORM:
+    case DXGI_FORMAT_B8G8R8X8_UNORM:
+    case DXGI_FORMAT_R10G10B10_XR_BIAS_A2_UNORM:
+    case DXGI_FORMAT_B8G8R8A8_TYPELESS:
+    case DXGI_FORMAT_B8G8R8A8_UNORM_SRGB:
+    case DXGI_FORMAT_B8G8R8X8_TYPELESS:
+    case DXGI_FORMAT_B8G8R8X8_UNORM_SRGB:
+    case DXGI_FORMAT_BC6H_TYPELESS:
+    case DXGI_FORMAT_BC6H_UF16:
+    case DXGI_FORMAT_BC6H_SF16:
+    case DXGI_FORMAT_BC7_TYPELESS:
+    case DXGI_FORMAT_BC7_UNORM:
+    case DXGI_FORMAT_BC7_UNORM_SRGB:
+    case DXGI_FORMAT_AYUV:
+    case DXGI_FORMAT_Y410:
+    case DXGI_FORMAT_Y416:
+    case DXGI_FORMAT_NV12:
+    case DXGI_FORMAT_P010:
+    case DXGI_FORMAT_P016:
+    case DXGI_FORMAT_420_OPAQUE:
+    case DXGI_FORMAT_YUY2:
+    case DXGI_FORMAT_Y210:
+    case DXGI_FORMAT_Y216:
+    case DXGI_FORMAT_NV11:
+    case DXGI_FORMAT_AI44:
+    case DXGI_FORMAT_IA44:
+    case DXGI_FORMAT_P8:
+    case DXGI_FORMAT_A8P8:
+    case DXGI_FORMAT_B4G4R4A4_UNORM:
+    case DXGI_FORMAT_P208:
+    case DXGI_FORMAT_V208:
+    case DXGI_FORMAT_V408:
+    case DXGI_FORMAT_SAMPLER_FEEDBACK_MIN_MIP_OPAQUE:
+    case DXGI_FORMAT_SAMPLER_FEEDBACK_MIP_REGION_USED_OPAQUE:
+        return true;
+
+    case DXGI_FORMAT_UNKNOWN:
+    case DXGI_FORMAT_FORCE_UINT:
+    default:
+        return false;
+    }
+}
+
 #pragma region D3D12_FEATURE_DATA_D3D12_OPTIONS
 
 inline std::ostream& operator<< (std::ostream& os, D3D12_SHADER_MIN_PRECISION_SUPPORT val)
@@ -63,7 +198,7 @@ inline std::ostream& operator<< (std::ostream& os, D3D12_SHADER_MIN_PRECISION_SU
     return os << s;
 }
 inline std::ostream& operator<< (std::ostream& os, D3D12_TILED_RESOURCES_TIER val)
-{		
+{
     std::string s;
     switch (val)
     {
@@ -79,7 +214,7 @@ inline std::ostream& operator<< (std::ostream& os, D3D12_TILED_RESOURCES_TIER va
     return os << s;
 }
 inline std::ostream& operator<< (std::ostream& os, D3D12_RESOURCE_BINDING_TIER val)
-{		
+{
     std::string s;
     switch (val)
     {
@@ -93,7 +228,7 @@ inline std::ostream& operator<< (std::ostream& os, D3D12_RESOURCE_BINDING_TIER v
     return os << s;
 }
 inline std::ostream& operator<< (std::ostream& os, D3D12_CONSERVATIVE_RASTERIZATION_TIER val)
-{		
+{
     std::string s;
     switch (val)
     {
@@ -108,7 +243,7 @@ inline std::ostream& operator<< (std::ostream& os, D3D12_CONSERVATIVE_RASTERIZAT
     return os << s;
 }
 inline std::ostream& operator<< (std::ostream& os, D3D12_CROSS_NODE_SHARING_TIER val)
-{		
+{
     std::string s;
     switch (val)
     {
@@ -124,7 +259,7 @@ inline std::ostream& operator<< (std::ostream& os, D3D12_CROSS_NODE_SHARING_TIER
     return os << s;
 }
 inline std::ostream& operator<< (std::ostream& os, D3D12_RESOURCE_HEAP_TIER val)
-{		
+{
     std::string s;
     switch (val)
     {
@@ -154,6 +289,7 @@ inline std::ostream& operator<< (std::ostream& os, D3D_FEATURE_LEVEL val)
     ADD_IF2(s, val, &, D3D_FEATURE_LEVEL_11_1);
     ADD_IF2(s, val, &, D3D_FEATURE_LEVEL_12_0);
     ADD_IF2(s, val, &, D3D_FEATURE_LEVEL_12_1);
+    ADD_IF2(s, val, &, D3D_FEATURE_LEVEL_12_2);
 
     return os << s;
 }
@@ -281,6 +417,8 @@ inline std::ostream& operator<< (std::ostream& os, DXGI_FORMAT val)
         CASE_ADD(s, DXGI_FORMAT_P208);
         CASE_ADD(s, DXGI_FORMAT_V208);
         CASE_ADD(s, DXGI_FORMAT_V408);
+        CASE_ADD(s, DXGI_FORMAT_SAMPLER_FEEDBACK_MIN_MIP_OPAQUE);
+        CASE_ADD(s, DXGI_FORMAT_SAMPLER_FEEDBACK_MIP_REGION_USED_OPAQUE);
         CASE_ADD(s, DXGI_FORMAT_FORCE_UINT);
     default:
         break;
@@ -306,6 +444,9 @@ inline std::ostream& operator<< (std::ostream& os, D3D_SHADER_MODEL val)
     ADD_IF2(s, val, &, D3D_SHADER_MODEL_6_3);
     ADD_IF2(s, val, &, D3D_SHADER_MODEL_6_4);
     ADD_IF2(s, val, &, D3D_SHADER_MODEL_6_5);
+    ADD_IF2(s, val, &, D3D_SHADER_MODEL_6_6);
+    ADD_IF2(s, val, &, D3D_SHADER_MODEL_6_7);
+    ADD_IF2(s, val, &, D3D_SHADER_MODEL_6_8);
 
     return os << s;
 }
@@ -315,6 +456,7 @@ inline std::ostream& operator<< (std::ostream& os, D3D_ROOT_SIGNATURE_VERSION va
     ADD_IF2(s, val, &, D3D_ROOT_SIGNATURE_VERSION_1);
     ADD_IF2(s, val, &, D3D_ROOT_SIGNATURE_VERSION_1_0);
     ADD_IF2(s, val, &, D3D_ROOT_SIGNATURE_VERSION_1_1);
+    ADD_IF2(s, val, &, D3D_ROOT_SIGNATURE_VERSION_1_2);
 
     return os << s;
 }
@@ -340,6 +482,9 @@ inline std::ostream& operator<< (std::ostream& os, D3D12_SHADER_CACHE_SUPPORT_FL
     ADD_IF2(s, val, &, D3D12_SHADER_CACHE_SUPPORT_LIBRARY);
     ADD_IF2(s, val, &, D3D12_SHADER_CACHE_SUPPORT_AUTOMATIC_INPROC_CACHE);
     ADD_IF2(s, val, &, D3D12_SHADER_CACHE_SUPPORT_AUTOMATIC_DISK_CACHE);
+    ADD_IF2(s, val, &, D3D12_SHADER_CACHE_SUPPORT_DRIVER_MANAGED_CACHE);
+    ADD_IF2(s, val, &, D3D12_SHADER_CACHE_SUPPORT_SHADER_CONTROL_CLEAR);
+    ADD_IF2(s, val, &, D3D12_SHADER_CACHE_SUPPORT_SHADER_SESSION_DELETE);
 
     return os << s;
 }
@@ -411,6 +556,7 @@ inline std::ostream& operator<< (std::ostream& os, D3D12_SHARED_RESOURCE_COMPATI
     {
         CASE_ADD(s, D3D12_SHARED_RESOURCE_COMPATIBILITY_TIER_0);
         CASE_ADD(s, D3D12_SHARED_RESOURCE_COMPATIBILITY_TIER_1);
+        CASE_ADD(s, D3D12_SHARED_RESOURCE_COMPATIBILITY_TIER_2);
     default:
         break;
     }
@@ -451,6 +597,7 @@ inline std::ostream& operator<< (std::ostream& os, D3D12_RAYTRACING_TIER val)
     {
         CASE_ADD(s, D3D12_RAYTRACING_TIER_NOT_SUPPORTED);
         CASE_ADD(s, D3D12_RAYTRACING_TIER_1_0);
+        CASE_ADD(s, D3D12_RAYTRACING_TIER_1_1);
     default:
         break;
     }
@@ -525,6 +672,7 @@ inline std::ostream& operator<< (std::ostream& os, D3D12_FORMAT_SUPPORT2 val)
     ADD_IF4(s, val, &, D3D12_FORMAT_SUPPORT2_OUTPUT_MERGER_LOGIC_OP                      , "OUTPUT_MERGER_LOGIC_OP"                      , Align(); );
     ADD_IF4(s, val, &, D3D12_FORMAT_SUPPORT2_TILED                                       , "TILED"                                       , Align(); );
     ADD_IF4(s, val, &, D3D12_FORMAT_SUPPORT2_MULTIPLANE_OVERLAY                          , "MULTIPLANE_OVERLAY"                          , Align(); );
+    ADD_IF4(s, val, &, D3D12_FORMAT_SUPPORT2_SAMPLER_FEEDBACK                            , "SAMPLER_FEEDBACK"                            , Align(); );
 
     return os << s;
 }
@@ -560,6 +708,31 @@ inline std::ostream& operator<< (std::ostream& os, D3D12_SAMPLER_FEEDBACK_TIER v
 
     return os << s;
 }
+inline std::ostream& operator<< (std::ostream& os, D3D12_WAVE_MMA_TIER val)
+{
+    switch (val)
+    {
+        CASE_ADD3(os, D3D12_WAVE_MMA_TIER_NOT_SUPPORTED);
+        CASE_ADD3(os, D3D12_WAVE_MMA_TIER_1_0);
+    default:
+        break;
+    }
+
+    return os;
+}
+inline std::ostream& operator<< (std::ostream& os, D3D12_TRI_STATE val)
+{
+    switch (val)
+    {
+        CASE_ADD3(os, D3D12_TRI_STATE_UNKNOWN);
+        CASE_ADD3(os, D3D12_TRI_STATE_FALSE);
+        CASE_ADD3(os, D3D12_TRI_STATE_TRUE);
+    default:
+        break;
+    }
+
+    return os;
+}
 inline std::ostream& operator<< (std::ostream& os, D3D12_FEATURE val)
 {
     std::string s;
@@ -587,11 +760,24 @@ inline std::ostream& operator<< (std::ostream& os, D3D12_FEATURE val)
         CASE_ADD(s, D3D12_FEATURE_SERIALIZATION);
         CASE_ADD(s, D3D12_FEATURE_CROSS_NODE);
         CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS5);
+        CASE_ADD(s, D3D12_FEATURE_DISPLAYABLE);
         CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS6);
         CASE_ADD(s, D3D12_FEATURE_QUERY_META_COMMAND);
         CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS7);
         CASE_ADD(s, D3D12_FEATURE_PROTECTED_RESOURCE_SESSION_TYPE_COUNT);
         CASE_ADD(s, D3D12_FEATURE_PROTECTED_RESOURCE_SESSION_TYPES);
+        CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS8);
+        CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS9);
+        CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS10);
+        CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS11);
+        CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS12);
+        CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS13);
+        CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS14);
+        CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS15);
+        CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS16);
+        CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS17);
+        CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS18);
+        CASE_ADD(s, D3D12_FEATURE_D3D12_OPTIONS19);
     default:
         break;
     }
