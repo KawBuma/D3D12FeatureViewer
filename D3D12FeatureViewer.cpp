@@ -526,7 +526,8 @@ public:
     bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS8(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS8& d3d12_options8)
     {
         os << "D3D12_FEATURE_DATA_D3D12_OPTIONS8" << std::endl;
-        // TODO: Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS8
+        ADD_TAB(os); ADD_STR(os, d3d12_options8, UnalignedBlockTexturesSupported);
+
         return true;
     }
     bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS9(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS9& d3d12_options9)
