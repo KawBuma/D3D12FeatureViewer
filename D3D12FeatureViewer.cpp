@@ -533,7 +533,13 @@ public:
     bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS9(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS9& d3d12_options9)
     {
         os << "D3D12_FEATURE_DATA_D3D12_OPTIONS9" << std::endl;
-        // TODO: Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS9
+        ADD_TAB(os); ADD_STR3(os, d3d12_options9, MeshShaderPipelineStatsSupported, "                  ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options9, MeshShaderSupportsFullRangeRenderTargetArrayIndex, " ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options9, AtomicInt64OnTypedResourceSupported, "               ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options9, AtomicInt64OnGroupSharedSupported, "                 ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options9, DerivativesInMeshAndAmplificationShadersSupported, " ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options9, WaveMMATier, "                                       ");
+
         return true;
     }
     bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS10(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS10& d3d12_options10)

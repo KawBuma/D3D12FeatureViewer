@@ -11,6 +11,8 @@
 
 #define CASE_ADD(dst, ev) case ev : dst += #ev; break
 #define CASE_ADD2(dst, ev, custom) case ev : dst += custom; break
+#define CASE_ADD3(dst, ev) case ev : dst << #ev; break
+#define CASE_ADD4(dst, ev, custom) case ev : dst << custom; break
 #define ADD_IF2(dst, val, op ,ev) if (val op ev) { AddBar(dst); dst += #ev; }
 #define ADD_IF3(dst, val, op ,ev, custom) if (val op ev) { AddBar(dst); dst += custom; }
 #define ADD_IF4(dst, val, op ,ev, custom, custom1) if (val op ev) { custom1 dst += custom; }
@@ -572,6 +574,18 @@ inline std::ostream& operator<< (std::ostream& os, D3D12_SAMPLER_FEEDBACK_TIER v
     }
 
     return os << s;
+}
+inline std::ostream& operator<< (std::ostream& os, D3D12_WAVE_MMA_TIER val)
+{
+    switch (val)
+    {
+        CASE_ADD3(os, D3D12_WAVE_MMA_TIER_NOT_SUPPORTED);
+        CASE_ADD3(os, D3D12_WAVE_MMA_TIER_1_0);
+    default:
+        break;
+    }
+
+    return os;
 }
 inline std::ostream& operator<< (std::ostream& os, D3D12_FEATURE val)
 {
