@@ -569,7 +569,13 @@ public:
     bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS13(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS13& d3d12_options13)
     {
         os << "D3D12_FEATURE_DATA_D3D12_OPTIONS13" << std::endl;
-        // TODO: Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS13
+        ADD_TAB(os); ADD_STR3(os, d3d12_options13, UnrestrictedBufferTextureCopyPitchSupported, " ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options13, UnrestrictedVertexElementAlignmentSupported, " ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options13, InvertedViewportHeightFlipsYSupported, "       ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options13, InvertedViewportDepthFlipsZSupported, "        ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options13, TextureCopyBetweenDimensionsSupported, "       ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options13, AlphaBlendFactorSupported, "                   ");
+
         return true;
     }
     bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS14(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS14& d3d12_options14)
