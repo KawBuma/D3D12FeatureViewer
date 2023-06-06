@@ -590,7 +590,9 @@ public:
     bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS15(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS15& d3d12_options15)
     {
         os << "D3D12_FEATURE_DATA_D3D12_OPTIONS15" << std::endl;
-        // TODO: Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS15
+        ADD_TAB(os); ADD_STR3(os, d3d12_options15, TriangleFanSupported, "                ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options15, DynamicIndexBufferStripCutSupported, " ");
+
         return true;
     }
     bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS16(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS16& d3d12_options16)
