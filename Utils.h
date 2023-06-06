@@ -587,6 +587,19 @@ inline std::ostream& operator<< (std::ostream& os, D3D12_WAVE_MMA_TIER val)
 
     return os;
 }
+inline std::ostream& operator<< (std::ostream& os, D3D12_TRI_STATE val)
+{
+    switch (val)
+    {
+        CASE_ADD3(os, D3D12_TRI_STATE_UNKNOWN);
+        CASE_ADD3(os, D3D12_TRI_STATE_FALSE);
+        CASE_ADD3(os, D3D12_TRI_STATE_TRUE);
+    default:
+        break;
+    }
+
+    return os;
+}
 inline std::ostream& operator<< (std::ostream& os, D3D12_FEATURE val)
 {
     std::string s;

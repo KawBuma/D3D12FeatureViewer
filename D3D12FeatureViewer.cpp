@@ -560,7 +560,10 @@ public:
     bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS12(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS12& d3d12_options12)
     {
         os << "D3D12_FEATURE_DATA_D3D12_OPTIONS12" << std::endl;
-        // TODO: Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS12
+        ADD_TAB(os); ADD_STR3(os, d3d12_options12, MSPrimitivesPipelineStatisticIncludesCulledPrimitives, " ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options12, EnhancedBarriersSupported, "                             ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options12, RelaxedFormatCastingSupported, "                         ");
+
         return true;
     }
     bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS13(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS13& d3d12_options13)
