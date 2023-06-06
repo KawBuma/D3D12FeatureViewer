@@ -606,7 +606,9 @@ public:
     bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS17(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS17& d3d12_options17)
     {
         os << "D3D12_FEATURE_DATA_D3D12_OPTIONS17" << std::endl;
-        // TODO: Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS17
+        ADD_TAB(os); ADD_STR3(os, d3d12_options17, NonNormalizedCoordinateSamplersSupported, " ");
+        ADD_TAB(os); ADD_STR3(os, d3d12_options17, ManualWriteTrackingResourceSupported, "     ");
+
         return true;
     }
     bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS18(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS18& d3d12_options18)
