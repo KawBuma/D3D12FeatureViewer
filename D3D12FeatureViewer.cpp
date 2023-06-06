@@ -614,7 +614,8 @@ public:
     bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS18(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS18& d3d12_options18)
     {
         os << "D3D12_FEATURE_DATA_D3D12_OPTIONS18" << std::endl;
-        // TODO: Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS18
+        ADD_TAB(os); ADD_STR(os, d3d12_options18, RenderPassesValid);
+
         return true;
     }
     bool Trace_D3D12_FEATURE_DATA_D3D12_OPTIONS19(std::ostream& os, const D3D12_FEATURE_DATA_D3D12_OPTIONS19& d3d12_options19)
