@@ -1,4 +1,4 @@
-#include "Utils.h"
+﻿#include "Utils.h"
 
 #pragma comment(lib, "d3d12.lib")
 #pragma comment(lib, "dxgi.lib")
@@ -30,6 +30,8 @@ public:
 
     bool Init(UINT adapter_index)
     {
+        std::cout << "D3D12FeatureViewer" << std::endl;
+
         {
             Ptr<ID3D12Debug> debug_controller;
             if (FAILED(D3D12GetDebugInterface(IID_PPV_ARGS(&debug_controller))))
@@ -69,12 +71,18 @@ public:
         std::cout   << "\tAdapterLuid           = " << GetLUIDString(reinterpret_cast<const uint8_t*>(&desc.AdapterLuid.LowPart))   << std::endl;
         std::cout   << "\tFlags                 = " << std::hex << desc.Flags << std::dec                                           << std::endl;
         std::cout << std::endl;
-        std::cout << std::endl;
 
         if (FAILED(D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_11_1, IID_PPV_ARGS(&device))))
         {
             std::cout << "Failed to create device." << std::endl;
             return false;
+        }
+
+        Microsoft::WRL::ComPtr<ID3D12DeviceConfiguration> device_config;
+        if (SUCCEEDED(device.As(&device_config)))
+        {
+            auto config_desc = device_config->GetDesc();
+            std::cout << "Agility SDK Version: " << config_desc.SDKVersion << std::endl;
         }
 
         return true;
